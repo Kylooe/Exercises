@@ -1,0 +1,95 @@
+body{
+    font-family: "Microsoft JhengHei", Arial, SimSun, sans-serif;
+    background: linear-gradient(90deg, #b9c3c9, #6b7c87);
+}
+
+form{
+    width: 350px;
+    margin: 40px auto;
+    position: relative;
+    padding: 30px;
+    border-radius: 5px;
+    border-top: 30px solid #5c5d5e;
+    background-color: #e8ebed;
+    box-shadow: 0 0 50px rgba(0,0,0,.1);
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+form:after{
+    content: "";
+    position: absolute;
+    top: -22px;
+    right: 15px;
+    width: 13px;
+    height: 13px;
+    background-color: #adadae;
+    border-radius: 3px;
+    box-shadow: -20px 0 0 #adadae;
+}
+
+h1{
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 2px dashed #adadae;
+}
+
+div#list{
+    padding-top: 15px;
+
+
+}
+
+input{
+    display: none;
+}
+
+label,a{
+    font-size: 1.2em;
+    padding: 5px 15px;
+    cursor: pointer;
+    display: block;
+}
+
+label:before,a:before{
+    font-family: "FontAwesome";
+    position: relative;
+    left: -10px;
+}
+
+label:hover,a:hover{
+    background-color: rgba(0,0,0,.6);
+    color: #e8ebed;
+    transition: all .2s;
+    -moz-transition: all .2s;
+    -webkit-transition: all .2s;
+    -ms-transition: all .2s;
+}
+
+label:before{
+    content: '\f196';
+}
+
+input:checked+label:before{
+    content: '\f147';
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
+}
+
+a:before{
+    content: '\f096';
+}
+
+div.sub{
+    margin-left: 15px;
+    display: none;
+}
+
+input:checked~div.sub{
+    display: block;
+}
