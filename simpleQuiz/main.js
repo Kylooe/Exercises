@@ -11,9 +11,9 @@ var allQuestions = [
 		correct: 4
 	},
 	{
-		question: "test？",
-		choices: ["A", "B", "C", "D", "E"],
-		correct: 3
+		question: "为了快速地查看功能，我们就此结束吧？",
+		choices: ["好的我知道了（乖巧", "我就不我就不", "哦（冷漠"],
+		correct: 0
 	}
 ];
 
@@ -45,15 +45,17 @@ function next() {
 				currentC += "<li>" + currentQ.choices[i] + "</li>";  //注意这里循环内直接修改DOM会很耗内存
 			}
 			ul.innerHTML = currentC;
-
-			page++;
 			selected(currentQ.correct);
 			score += currentScore;  //总分即为每轮得分总和
-			allChoices.push(currentAnswer);
-
+			if(typeof currentAnswer === "number") {
+				allChoices.push(currentAnswer);
+			}
+			page++;
 
 		} else {  //总结页面
-			title.innerHTML = score;
+			allChoices.push(currentAnswer);
+			score += currentScore;
+			title.innerHTML = "总得分：" + score;
 			var text = "";
 			for(var i=0; i<questionsLen; i++) {
 				text += "问题：" + allQuestions[i].question + "<br />" + "正确答案：" + allQuestions[i].choices[allQuestions[i].correct] + "<br />" + "你的答案：" + allQuestions[i].choices[allChoices[i]] + "<br />";
@@ -64,6 +66,8 @@ function next() {
 			score = 0;
 			btn.value = "ReStart";
 		}
+		
+
 	};
 }
 
