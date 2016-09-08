@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>To Do List</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+  <style type="text/css">
+    body {
+    font-family: "Microsoft JhengHei", Arial, SimSun, sans-serif;
+    background: linear-gradient(90deg, #b9c3c9, #6b7c87);
+}
+
+form {
+    max-width: 400px;
+    margin: 40px auto;
+    border-top: 5px solid #5c5d5e;
+    background-color: rgba(255,255,255,.2);
+    box-shadow: 0 0 50px rgba(0,0,0,.1);
+}
+
+form h1 {
+    margin: 0;
+    padding: 10px;
+    text-align: center;
+    background-color: rgba(255,255,255,.3);
+}
+
+/* 使用flez布局的order属性进行item的归类划分 */
+form div {
+    display: flex;
+    flex-direction: column;
+    padding: 15px 20px 25px;
+    counter-reset: todo done;
+}
+
+h2 {
+    margin: 0;
+    padding: 15px 10px;
+    position: relative;
+}
+
+h2#todo {
+    order: 1;
+}
+
+h2#todo:after, h2#done:after {
+    font-size: .8em;
+    margin-left: 8px;
+    color: #5c5d5e;
+}
+
+h2#todo:after {
+    content: counter(todo);
+}
+
+h2#done {
+    order: 3;
+}
+
+h2#done:after {
+    content: counter(done);
+}
+
+input {
+    position: absolute;
+    left: -9999px;
+}
+
+label {
+    display: block;
+    order: 2;
+    padding: 5px 40px;
+    font-size: 1.5em;
+    transition: all .5s;
+    counter-increment: todo;
+}
+
+label:hover {
+    cursor: pointer;
+    background-color: rgba(255,255,255,.3);
+}
+
+label:before {
+    font-family: "FontAwesome";
+    position: relative;
+    left: -20px;
+    content: "\f096";
+}
+
+input:checked+label {
+    order: 4;
+    text-decoration: line-through;
+    counter-increment: done;
+}
+
+/* 默认情况下text-decoration:none;对伪元素不起作用，可以通过设置为inline-block解决 */
+input:checked+label:before {
+    content: "\f046";
+    display: inline-block;
+    text-decoration: none;
+}
+  </style>
+</head>
+<body>
+  <form>
+    <h1>My To-do List</h1>
+    <div>
+      <input type="checkbox" id="item1" name="item1">
+      <label for="item1">First task</label>
+      <input type="checkbox" id="item2" name="item2">
+      <label for="item2">Second task</label>
+      <input type="checkbox" id="item3" name="item3">
+      <label for="item3">Third task</label>
+      <input type="checkbox" id="item4" name="item4" checked>
+      <label for="item4">Fourth task</label>
+      <!-- 两个二级标题需要设置在label后面否则counter不起作用 -->
+      <h2 id="todo">TODO</h2>
+      <h2 id="done">DONE</h2>
+    </div>
+  </form>
+</body>
+</html>

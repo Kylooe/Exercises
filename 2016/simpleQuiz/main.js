@@ -75,7 +75,7 @@ function next() {
 function selected(answer) {
 	var selectedOrder,
 		len = li.length;
-	ul.onclick = function() {
+	ul.onclick = function(e) {
 		var e = e || window.event,
 			target = e.target || e.srcElement;
 		for(var i=0; i<len; i++) {

@@ -1,0 +1,129 @@
+body{
+	font-family: "Microsoft JhengHei", Arial, SimSun, sans-serif;
+	background: black url(./bg.png);
+	background-attachment: fixed;
+	color: white;
+	overflow: hidden;
+}
+
+#container{
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+nav{
+	width: 100%;
+	position: fixed;
+	bottom: 0;
+	z-index: 10;
+}
+
+nav a{
+	width: 25%;
+	height: 50px;
+	display: inline-block;
+	text-decoration: none;
+	color: white;
+	font-size: 1.5em;
+	line-height: 50px;
+	text-align: center;
+	background-color: #a73a37;
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+nav a:hover{
+	background-color: #632322;
+}
+
+a.act,a.act:hover{
+	background-color: transparent;
+}
+
+div#sub-container{
+	overflow: hidden;
+}
+
+div#text{
+	margin: 20px auto;
+	height: 30px;
+	width: 570px;
+	line-height: 25px;
+
+	font-size: 20px;
+	overflow: hidden;
+	color: rgba(255,255,255,.8);
+}
+
+div#text p{
+	display: inline;
+	float: left;
+	margin: 0;
+}
+
+div#text p:after{
+	content: "。希望可以给我一个机会><";
+	position: relative;
+	left: 80px;
+}
+
+div#text ul{
+	display: inline-block;
+	text-align: center;
+	padding-left: 240px;
+	padding-right: 10px;
+	margin: 0;
+	animation: scroll 8s infinite ease-in-out;
+}
+
+ul li{
+	list-style: none;
+}
+
+@keyframes scroll{
+	0%, 10%, 100% {transform:translateY(-20%);}
+	20%, 90% {transform:translateY(-40%);}
+	30%, 80% {transform:translateY(-60%);}
+	40%, 70% {transform:translateY(-80%);}
+	50%, 60% {transform:translateY(-100%);}
+}
+
+div#sub-container{
+	width: 100%;
+	height: 80%;
+	position: absolute;
+	bottom: 50px;
+}
+
+div#scroll,section{
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+}
+
+div#scroll{
+	transition: all .2s;
+}
+
+section{
+
+}
+div.page{
+	height: 90%;
+	width: 80%;
+	text-align: center;
+	margin: auto;
+	background-color: rgba(255,255,255,.2);
+	border-radius: 10px;
+}
+
+div.page h2{
+	margin: 0;
+	padding-top: 20px;
+}
+

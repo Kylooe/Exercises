@@ -4,7 +4,7 @@ body{
 }
 
 form{
-    width: 350px;
+    max-width: 350px;
     margin: 40px auto;
     position: relative;
     padding: 30px;
@@ -38,12 +38,11 @@ h1{
 
 div#list{
     padding-top: 15px;
-
-
 }
 
 input{
-    display: none;
+    position: absolute;
+    left: -9999px;
 }
 
 label,a{
@@ -69,11 +68,11 @@ label:hover,a:hover{
 }
 
 label:before{
-    content: '\f196';
+    content: "\f196";
 }
 
 input:checked+label:before{
-    content: '\f147';
+    content: "\f147";
 }
 
 a{
@@ -82,7 +81,7 @@ a{
 }
 
 a:before{
-    content: '\f096';
+    content: "\f096";
 }
 
 div.sub{

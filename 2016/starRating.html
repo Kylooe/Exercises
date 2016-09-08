@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>星级评分小模块</title>
+  <meta charset="utf-8">
+  <style type="text/css">
+    section {
+    width: 300px;
+    margin: 50px auto;
+    background-color: #d5dade;
+    text-align: center;
+    padding: 20px 0;
+    border-radius: 10px;
+    }
+
+    ul {
+        padding: 0;
+        color: white;
+    }
+
+    li {
+      display: inline-block;
+      text-decoration: none;
+        font-size: 2em;
+    }
+
+    .bling {
+      color: yellow;
+    }
+  </style>
+</head>
+
+<body>
+  <section>
+    <ul id="stars">
+      <li>★</li>
+      <li>★</li>
+      <li>★</li>
+    </ul>
+    <p>点击星星进行评级</p>
+  </section>
+  
+  <script type="text/javascript">
+    var stars = document.getElementById("stars"),
+        star = stars.getElementsByTagName("li");
+    for(var i=0, len=star.length; i<len; i++) {
+        star[i].index = i;
+        star[i].addEventListener("click", light, false);
+    }
+
+
+    function light() {
+        for(var j=0; j<this.index+1; j++) {
+            star[j].className = "bling";
+        }
+        for(var j=this.index+1; j<len; j++) {
+            star[j].className = "";
+        }
+    }
+  </script>
+</body>
+</html>
