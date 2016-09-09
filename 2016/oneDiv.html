@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>one div</title>
+  <meta charset="utf-8">
+  <style type="text/css">
+    body {
+      background-color: #b43d3d;
+      overflow: hidden;
+      font-family: "Century Gothic", Arial, sans-serif;
+    }
+
+    div {
+      height: 600px;
+      width: 600px;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      margin-top: -300px;
+      margin-left: -300px;
+      background-image: url("./4.jpg");
+      background-size: cover;
+      border-radius: 50%;
+      color: black;
+      border: 8px solid rgba(0,0,0,.8);
+      box-shadow: 0 0 20px 5px rgba(0,0,0,.4);
+    }
+
+    div:before {
+      content: "Heartunder Blade";
+      display: inline-block;
+      width: 600px;
+      text-align: center;
+      font-size: 2em;
+      margin-top: 100px;
+      text-shadow: 0 0 20px white;
+    }
+
+    div:after {
+      content: "\A CopyRight©Kylooe";
+      font-size: 1.1em;
+      text-align: center;
+      white-space: pre;
+      line-height: 180px;
+      text-shadow: 0 0 15px white;
+      width: 150px;
+      height: 150px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      background-color: inherit;
+      border-radius: 50%;
+      border: 20px solid rgba(0,0,0,0);
+      box-shadow: 0 0 0 40px rgba(0,0,0,.7) inset, 0 0 40px 40px rgba(0,0,0,.6) inset, 0 0 0 75px #b43d3d inset, 0 0 0 3px rgba(0,0,0,.8);
+    }
+
+    div:hover {
+      animation: play 10s infinite linear;
+    }
+
+    @keyframes play {
+      0% {transform: rotateZ(0deg);}
+      25% {transform: rotateZ(90deg);}
+      50% {transform: rotateZ(180deg);}
+      75% {transform: rotateZ(270deg);}
+      100% {transform: rotateZ(360deg);}
+    }
+
+  </style>
+</head>
+<body>
+  <div>
+  </div>
+</body>
+</html>
