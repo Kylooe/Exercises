@@ -1,0 +1,150 @@
+html {
+    min-height: 100%;
+}
+
+body {
+    height: 100%;
+    font-family: "Microsoft JhengHei", Arial, SimSun, sans-serif;
+/*background: linear-gradient(90deg, #b9c3c9, #dac4cd);*/
+    background-color: #b9c3c9;
+}
+
+section {
+    width: 450px;
+    margin: 40px auto;
+    border-top: 5px solid #5c5d5e;
+    background-color: rgba(255,255,255,.2);
+    box-shadow: 0 0 50px rgba(0,0,0,.1);
+}
+
+section h1 {
+    margin: 0;
+    padding: 10px;
+    text-align: center;
+    background-color: rgba(255,255,255,.3);
+}
+
+div#list {
+    padding: 20px 25px;
+}
+
+input#txt {
+    font-family: "Microsoft JhengHei", Arial;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px 10px;
+    border: none;
+    font-size: 1.5em;
+    background-color: inherit;
+    border-bottom: 2px solid #5c5d5e;
+    margin-bottom: 10px;
+}
+
+input#txt:hover{
+    background-color: rgba(255,255,255,.5);
+}
+
+input#txt:focus {
+    outline: none;
+}
+
+div#list h2 {
+    margin: 0;
+    padding: 15px 10px 10px;
+}
+
+span {
+    float: right;
+    font-weight: normal;
+}
+
+div#list ul {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 1.5em;
+    line-height: 35px;
+}
+
+input[type="checkbox"] {
+    position: absolute;
+    left: -9999px;
+}
+
+ul li {
+    position: relative;
+}
+
+ul li:hover {
+    cursor: pointer;
+    background-color: rgba(255,255,255,.3);
+}
+
+li label {
+    display: block;
+    padding: 5px 40px 5px 35px;
+}
+
+li label:before {
+    font-family: "FontAwesome";
+    position: relative;
+    left: -15px;
+    content: "\f096";
+}
+
+label:hover {
+    cursor: pointer;
+}
+
+input:checked+label {
+    text-decoration: line-through;
+}
+
+input:checked+label:before {
+    content: "\f046";
+    display: inline-block;
+    text-decoration: none;
+}
+
+li i.fa-times {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    line-height: 40px;
+    text-align: center;
+}
+
+li:hover i.fa-times {
+    display: inline-block;
+}
+
+/* counter */
+div#list {
+    counter-reset: todo done;
+}
+
+ul#todo-list li {
+    counter-increment: todo;
+}
+
+ul#done-list li {
+    counter-increment: done;
+}
+
+ul#todo-list:after {
+    content: counter(todo);
+}
+
+ul#done-list:after {
+    content: counter(done);
+}
+
+ul#todo-list:after, ul#done-list:after {
+    position: absolute;
+    top: -45px;
+    right: 10px;
+}
