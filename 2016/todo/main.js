@@ -46,7 +46,7 @@ function delItem() {
 }
 
 function toggle() {
-    list.addEventListener("change", function(e) {
+    list.addEventListener("click", function(e) {
         var e = e || window.event,
             target = e.target || e.srcElement,
             len = li.length,
@@ -57,11 +57,11 @@ function toggle() {
                 if(checkbox[i].checked) {
                     saveChange(false, content);
                     doneList.appendChild(checkbox[i].parentNode);
+                    break;
                 } else {
                     saveChange(true, content);
                     todoList.appendChild(checkbox[i].parentNode);
                 }
-                break;
             }
         }
     }, false);
