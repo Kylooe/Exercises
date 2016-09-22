@@ -23,6 +23,9 @@
       border-radius: 50%;
       color: black;
       box-shadow: 0 0 0 5px rgba(255,255,255,.3), 0 0 20px 10px rgba(0,0,0,.2);
+      animation: play 10s infinite linear;
+      animation-play-state: paused;
+      -webkit-animation-play-state: paused;
     }
 
     div:before {
@@ -56,7 +59,8 @@
     }
 
     div:hover {
-      animation: play 10s infinite linear;
+      animation-play-state:running;
+      -webkit-animation-play-state:running;
     }
 
     @keyframes play {
