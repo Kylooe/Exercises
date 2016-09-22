@@ -3,7 +3,6 @@ html {
 }
 
 body {
-    height: 100%;
     font-family: "Microsoft JhengHei", Arial, SimSun, sans-serif;
 /*background: linear-gradient(90deg, #b9c3c9, #dac4cd);*/
     background-color: #b9c3c9;
@@ -53,11 +52,6 @@ div#list h2 {
     padding: 15px 10px 10px;
 }
 
-span {
-    float: right;
-    font-weight: normal;
-}
-
 div#list ul {
     position: relative;
     margin: 0;
@@ -67,48 +61,48 @@ div#list ul {
     line-height: 35px;
 }
 
-input[type="checkbox"] {
+div#list input[type="checkbox"] {
     position: absolute;
     left: -9999px;
 }
 
-ul li {
+div#list ul li {
     position: relative;
 }
 
-ul li:hover {
+div#list ul li:hover {
     cursor: pointer;
     background-color: rgba(255,255,255,.3);
 }
 
-li label {
+div#list ul li label {
     display: block;
     padding: 5px 40px 5px 35px;
 }
 
-li label:before {
+div#list ul li label:before {
     font-family: "FontAwesome";
     position: relative;
     left: -15px;
     content: "\f096";
 }
 
-label:hover {
+div#list ul li label:hover {
     cursor: pointer;
 }
 
-input:checked+label {
+div#list ul li input:checked+label {
     text-decoration: line-through;
 }
 
-input:checked+label:before {
+div#list ul li input:checked+label:before {
     content: "\f046";
     display: inline-block;
     text-decoration: none;
 }
 
-li i.fa-times {
-    display: none;
+div#list ul li i.fa-times {
+    visibility: hidden;
     position: absolute;
     right: 0;
     top: 50%;
@@ -118,8 +112,8 @@ li i.fa-times {
     text-align: center;
 }
 
-li:hover i.fa-times {
-    display: inline-block;
+div#list ul li:hover i.fa-times {
+    visibility: visible;
 }
 
 /* counter */
