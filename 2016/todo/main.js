@@ -50,14 +50,13 @@ function toggle() {
         var e = e || window.event,
             target = e.target || e.srcElement,
             len = li.length,
-            checkbox = document.getElementsByName("items");
+            checkbox = list.querySelectorAll('input[type="checkbox"]');
         for(var i=0; i<len; i++) {
             if(checkbox[i] === target) {
                 var content = checkbox[i].nextSibling.innerHTML; // 相应待办事项的内容
                 if(checkbox[i].checked) {
                     saveChange(false, content);
                     doneList.appendChild(checkbox[i].parentNode);
-                    break;
                 } else {
                     saveChange(true, content);
                     todoList.appendChild(checkbox[i].parentNode);

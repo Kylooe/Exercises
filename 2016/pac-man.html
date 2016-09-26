@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>pac-man</title>
+  <style type="text/css">
+    div.pac-man {
+      width: 0;
+      height: 0;
+      position: absolute;
+      right: 990px;
+      bottom: 100px;
+      border: 10px solid #000;
+      border-radius: 50%;
+      /* boder: 10px solid #233999; */
+      box-shadow: 100px 0 0 #000, 200px 0 0 #000, 300px 0 0 #000, 400px 0 0 #000, 500px 0 0 #000, 600px 0 0 #000, 700px 0 0 #000, 800px 0 0 #000, 900px 0 0 #000, 1000px 0 0 #000;
+      animation: go 5s steps(5);
+    }
+
+    div.pac-man:before, div.pac-man:after {
+      content: "";
+      height: 0;
+      position: absolute;
+      top: -40px;
+      left: -40px;
+      border: 40px solid #ffe401;
+      border-radius: 50%;
+    }
+
+    div.pac-man:before {
+      border-bottom-color: transparent;
+      border-left-color: transparent;
+      animation: pac0 .5s infinite;
+    }
+
+    div.pac-man:after {
+      border-top-color: transparent;
+      border-right-color: transparent;
+      animation: pac1 .5s infinite;
+    }
+
+    @keyframes pac0 {
+      0%, 100% { transform: rotate(-90deg); }
+      50% { transform: rotate(-45deg); }
+    }
+
+    @keyframes pac1 {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(-45deg); }
+    }
+
+    @keyframes go {
+      50% { transform: translateX(500px); }
+      100% { transform: translateX(1000px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="pac-man"></div>
+</body>
+</html>
