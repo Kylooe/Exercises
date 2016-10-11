@@ -3,9 +3,30 @@ var list = document.getElementById("list"),
     doneList = document.getElementById("done-list"),
     li = list.getElementsByTagName("li");
 
-    
-function enter() {
-    var order = 0;
+window.addEventListener("load", function() {
+    todoList.innerHTML = loadList("todo");
+    doneList.innerHTML = loadList("done");
+    var order = li.length;
+    enter(order);
+    }, false);
+
+function loadList(key) {
+    var content = "";
+    if(localStorage.getItem(key) !== null) {
+        var items = loadData(key);
+        for(var i=0, len=items.length; i<len; i++) {
+            if(key === "done") {
+                var order = loadData("todo").length + i;
+                content +=  "<li><input type=\"checkbox\" id=\"item" + order + "\" name=\"items\" checked><label for=\"item" + order + "\">" + items[i] + "</label><i class=\"fa fa-times\" aria-hidden=\"true\"></i></li>";
+            } else {
+                content +=  "<li><input type=\"checkbox\" id=\"item" + i + "\" name=\"items\"><label for=\"item" + i + "\">" + items[i] + "</label><i class=\"fa fa-times\" aria-hidden=\"true\"></i></li>";
+            }
+        }
+    }
+    return content;
+}
+
+function enter(order) {
     var txt = document.getElementById("txt");
     txt.onkeyup = function(e) {
         var e = e || window.event,
@@ -121,27 +142,6 @@ function saveDel(list, content) {
     localStorage.setItem("done", JSON.stringify(done));
 }
 
-function loadList(key) {
-    var content = "";
-    if(localStorage.getItem(key) !== null) {
-        var items = loadData(key);
-        for(var i=0, len=items.length; i<len; i++) {
-            if(key === "done") {
-                content +=  "<li><input type=\"checkbox\" id=\"item" + i + "\" name=\"items\" checked><label for=\"item" + i + "\">" + items[i] + "</label><i class=\"fa fa-times\" aria-hidden=\"true\"></i></li>";
-            } else {
-                content +=  "<li><input type=\"checkbox\" id=\"item" + i + "\" name=\"items\"><label for=\"item" + i + "\">" + items[i] + "</label><i class=\"fa fa-times\" aria-hidden=\"true\"></i></li>";
-            }
-        }
-    }
-    return content;
-}
-
-window.addEventListener("load", function() {
-    todoList.innerHTML = loadList("todo");
-    doneList.innerHTML = loadList("done");
-    }, false);
-
-enter();
 delItem();
 toggle();
 
