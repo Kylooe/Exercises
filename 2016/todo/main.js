@@ -2,9 +2,10 @@ var list = document.getElementById("list"),
     todoList = document.getElementById("todo-list"),
     doneList = document.getElementById("done-list"),
     li = list.getElementsByTagName("li");
-var order = 0;
+
     
 function enter() {
+    var order = 0;
     var txt = document.getElementById("txt");
     txt.onkeyup = function(e) {
         var e = e || window.event,

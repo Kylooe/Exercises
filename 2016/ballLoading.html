@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ball loading</title>
+    <meta charset="utf-8">
+    <style type="text/css">
+        div {
+            width: 40px;
+            height: 80px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -40px;
+            margin-left: -20px;
+        }
+        div:before {
+            content: '';
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            border-radius: 50%;
+            background-color: #dac4cd;
+            animation: bounce .8s ease-out infinite;
+        }
+
+        div:after {
+            content: '';
+            width: 50px;
+            height: 5px;
+            position: absolute;
+            bottom: 0;
+            left: -5px;
+            background-color: #eee;
+            border-radius: 50%;
+            animation: shadow .8s ease-out infinite;
+        }
+
+        @keyframes bounce {
+            0% {
+                top: 0;
+                transform: scale(1,1);
+            }
+            50% {
+                top: 40px;
+                transform: scale(1.2,0.8);
+            }
+            75% {
+                transform: scale(0.8,1.2);
+            }
+            100% {
+                top: 0;
+                transform: scale(1,1);
+            }
+        }
+
+        @keyframes shadow {
+            0% {
+                opacity: .8;
+                transform: scale(0.5,0.5);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1,1);
+            }
+
+            100% {
+                opacity: .8;
+                transform: scale(0.5,0.5);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+</body>
+</html>
