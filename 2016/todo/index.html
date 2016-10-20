@@ -7,7 +7,7 @@
   <link rel="stylesheet" type="text/css" href="./style.css">
 </head>
 <body>
-  <section>
+  <section id="task" class="on">
     <h1>My To-do List</h1>
     <div id="list">
       <input type="text" name="txt" id="txt" placeholder="type to add new item here" autocomplete="off" autofocus>
@@ -16,6 +16,20 @@
       <h2>DONE</h2>
       <ul id="done-list"></ul>
     </div>
+  </section>
+  <section id="pomodoro" class="off">
+    <h1>Pomodoro Technique</h1>
+    <div>
+      <p id="count-down">25:00</p>
+      <svg width="360" height="360">
+        <circle cx="180" cy="180" r="150" stroke="#5c5d5e" stroke-width="2" fill="none" transform="rotate(-90 180 180)" stroke-dasharray="943 0"></circle>
+      </svg>
+      <p>In <input type="text" id="plan-time" value="25"> minutes stay focused for</p>
+      <p id="current"></p>
+    </div>
+    <input type="button" id="work" value="START">
+    <input type="button" id="back" value="CLOSE">
+    <audio src="./dingdong.ogg" id="bell"></audio>
   </section>
   <script type="text/javascript" src="./main.js"></script>
 </body>

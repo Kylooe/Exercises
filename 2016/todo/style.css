@@ -5,12 +5,14 @@ html {
 body {
     font-family: "Microsoft JhengHei", Arial, SimSun, sans-serif;
     background: linear-gradient(90deg, #b9c3c9, #dac4cd);
-    /*background-color: #b9c3c9;*/
 }
 
 section {
-    width: 450px;
-    margin: 40px auto;
+    min-width: 450px;
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    margin-left: -225px;
     border-top: 5px solid #5c5d5e;
     background-color: rgba(255,255,255,.2);
     box-shadow: 0 0 50px rgba(0,0,0,.1);
@@ -28,7 +30,7 @@ div#list {
 }
 
 input#txt {
-    font-family: "Microsoft JhengHei", Arial;
+    font-family: inherit;
     width: 100%;
     box-sizing: border-box;
     padding: 5px 10px;
@@ -39,7 +41,7 @@ input#txt {
     margin-bottom: 10px;
 }
 
-input#txt:hover{
+input#txt:hover {
     background-color: rgba(255,255,255,.5);
 }
 
@@ -58,7 +60,7 @@ div#list ul {
     padding: 0;
     list-style: none;
     font-size: 1.5em;
-    line-height: 35px;
+    line-height: 40px;
 }
 
 div#list input[type="checkbox"] {
@@ -77,13 +79,14 @@ div#list ul li:hover {
 
 div#list ul li label {
     display: block;
-    padding: 5px 40px 5px 35px;
+    padding-right: 70px;
+    padding-left: 40px;
 }
 
 div#list ul li label:before {
     font-family: "FontAwesome";
-    position: relative;
-    left: -15px;
+    position: absolute;
+    left: 10px;
     content: "\f096";
 }
 
@@ -101,19 +104,29 @@ div#list ul li input:checked+label:before {
     text-decoration: none;
 }
 
-div#list ul li i.fa-times {
+div#list ul li i {
     visibility: hidden;
     position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 40px;
-    line-height: 40px;
+    top: 0;
+    width: 35px;
+    line-height: inherit;
     text-align: center;
 }
 
-div#list ul li:hover i.fa-times {
+i.fa-clock-o {
+    right: 35px;
+}
+
+i.fa-times {
+    right: 0;
+}
+
+div#list ul li:hover i {
     visibility: visible;
+}
+
+i:hover {
+    background-color: rgba(255,255,255,.5);
 }
 
 /* counter */
@@ -141,4 +154,82 @@ ul#todo-list:after, ul#done-list:after {
     position: absolute;
     top: -45px;
     right: 10px;
+}
+
+/* tomato */
+section#pomodoro div {
+    width: 360px;
+    margin: auto;
+    position: relative;
+    font-size: 1.5em;
+}
+
+section#pomodoro div p {
+    margin: 0;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+p#count-down {
+    position: absolute;
+    top: 180px;
+    left: 180px;
+    transform: translate(-50%,-50%);
+    font-size: 100px;
+    font-weight: 100;
+    font-family: "Segoe UI Light";
+}
+
+section#pomodoro input#plan-time {
+    display: inline;
+    width: 2em;
+    border: none;
+    background-color: inherit;
+    border-bottom: 2px solid #5c5d5e;
+    text-align: center;
+    font-size: inherit;
+}
+
+input#plan-time:focus, input#work:focus{
+    outline: none;
+}
+
+p#current {
+    text-align: center;
+    font-size: 1.5em;
+}
+
+section#pomodoro input[type="button"] {
+    display: block;
+    margin: 25px auto;
+    padding: 5px;
+    font-family: inherit;
+    font-size: 1.5em;
+    cursor: pointer;
+    background-color: rgba(255,255,255,.6);
+    border-radius: 10px;
+    border: none;
+}
+
+input#work {
+    width: 60%;
+}
+
+input#back {
+    width: 40%;
+}
+
+section#task, section#prmodoro {
+    transition: all .5s;
+}
+
+.off {
+    opacity: 0;
+    z-index: 1;
+}
+
+.on {
+    opacity: 1;
+    z-index: 10;
 }
