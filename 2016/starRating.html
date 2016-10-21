@@ -19,9 +19,10 @@
     }
 
     li {
-      display: inline-block;
+      display: inline;
       text-decoration: none;
-        font-size: 2em;
+      font-size: 2em;
+      cursor: pointer;
     }
 
     .bling {
@@ -33,29 +34,51 @@
 <body>
   <section>
     <ul id="stars">
-      <li>★</li>
-      <li>★</li>
-      <li>★</li>
+      <li>★</li><li>★</li><li>★</li><li>★</li><li>★</li>
     </ul>
     <p>点击星星进行评级</p>
   </section>
   
   <script type="text/javascript">
+  (function() {
     var stars = document.getElementById("stars"),
-        star = stars.getElementsByTagName("li");
-    for(var i=0, len=star.length; i<len; i++) {
-        star[i].index = i;
-        star[i].addEventListener("click", light, false);
+        star = stars.getElementsByTagName("li"),
+        len = star.length;
+    var index;
+    stars.addEventListener("click", bling, false);
+    stars.addEventListener("mouseover", bling, false);
+    stars.addEventListener("mouseout", function() {
+      if(isNaN(index)) {
+        blink(-1);
+      } else {
+        blink(index);
+      }
+    }, false);
+
+    function bling(e) {
+      var e = e || window.event,
+          target = e.target || e.srcElement;
+      for(var i=0; i<len; i++) {
+        if(target === star[i]) {
+          blink(i);
+          if(e.type==="click") {
+            index = i;
+            var p = document.getElementsByTagName("p")[0];
+            p.innerHTML = (index+1) + "分！";
+          }
+        }
+      }
     }
 
-    function light() {
-        for(var j=0; j<this.index+1; j++) {
-            star[j].className = "bling";
-        }
-        for(var j=this.index+1; j<len; j++) {
-            star[j].className = "";
-        }
+    function blink(num) {
+          for(var j=0; j<num+1; j++) {
+              star[j].className = "bling";
+          }
+          for(var j=num+1; j<len; j++) {
+              star[j].className = "";
+          }
     }
+  }());
   </script>
 </body>
 </html>
