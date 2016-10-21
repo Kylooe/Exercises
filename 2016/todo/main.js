@@ -61,7 +61,7 @@ function enter(order) {
 
 function addItem(order, content) {
     var newLi = document.createElement("li");
-    var newLiContent = createLi(order, content, "todo");
+    var newLiContent = createLi(order, content, "todo").slice(4,-5);
     newLi.innerHTML = newLiContent;
     todoList.appendChild(newLi);
     saveNew(content);
@@ -253,6 +253,10 @@ work.addEventListener("click", function() {
 }, false);
 
 back.addEventListener("click", function() {
-    task.className = "on";
-    pomodoro.className = "off";
+    if(isTiming) {
+        alert("保持专注中，请先停止番茄钟。");
+    } else {
+        task.className = "on";
+        pomodoro.className = "off";
+    }
 },false);
