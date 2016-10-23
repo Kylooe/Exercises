@@ -18,9 +18,13 @@ form {
     -ms-user-select: none;
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 450px) {
     form {
-        width: 300px;
+        width: 80%;
+        padding: 20px;
+    }
+    h1 {
+        font-size: 1.5em;
     }
 }
 
