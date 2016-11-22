@@ -10,10 +10,12 @@ function init() {
 }
 
 var Color = {
-    fog: 0xf9ecd6,
+    fog: 0xdbdfce,
     ambient: 0xc6c6c6,
-    sea: 0x68c3c0,
-    plane: 0xf25346
+    sea: 0xb67768,
+    planeMain: 0xaa3311,
+    planeSub: 0xdc7b17,
+    coin: 0xf2e3c4
 };
 
 var width, height, scene, camera, renderer;
@@ -93,7 +95,7 @@ function createSea() {
 
     sea = new THREE.Mesh(geom, mat);
     sea.receiveShadow = true;
-    sea.position.y = -800;
+    sea.position.y = -780;
     sea.geometry.verticesNeedUpdate = true;
     scene.add(sea);
 }
@@ -120,7 +122,7 @@ var Cloud = function(){
 var sky;
 function createSky() {
     sky = new THREE.Object3D();
-    var num = 15;
+    var num = 18;
     for(var i=0; i<num; i++) {
         var cloud = new Cloud();
         var ang = Math.PI * 2 / num * i,
@@ -137,12 +139,37 @@ function createSky() {
     scene.add(sky);
 }
 
+var Coin = function() {
+    var geom = new THREE.BoxGeometry(5, 5, 5);
+    var mat = new THREE.MeshPhongMaterial({
+    color: Color.coin,
+    shininess: 0,  // 发光
+    specular: 0xffffff,  // 反射
+    shading: THREE.FlatShading
+    });
+    this.mesh = new THREE.Mesh(geom,mat);
+    this.mesh.castShadow = true;
+    this.ang = 0;
+    this.dis = 0;
+}
+
+var Coins = function(n){
+    this.mesh = new THREE.Object3D();
+    this.array = [];
+    for(var i=0; i<n; i++) {
+        var coin = new Coin();
+        this.array.push(coin);
+    }
+}
+
+
+
 var Plane = function(){
     this.mesh = new THREE.Object3D();
     // 机舱
     var geomCabin = new THREE.BoxGeometry(35, 25, 25);
-    var matCabin = new THREE.MeshPhongMaterial({
-        color: Color.plane,
+    var matMain = new THREE.MeshPhongMaterial({
+        color: Color.planeMain,
         shading: THREE.FlatShading
     });
     geomCabin.vertices[4].y -= 5;
@@ -153,17 +180,12 @@ var Plane = function(){
     geomCabin.vertices[6].z += 10;
     geomCabin.vertices[7].y += 8;
     geomCabin.vertices[7].z -= 10;
-    var cabin = new THREE.Mesh(geomCabin, matCabin);
+    var cabin = new THREE.Mesh(geomCabin, matMain);
     cabin.castShadow = true;
     cabin.receiveShadow = true;
     this.mesh.add(cabin);
     
-    var geom = new THREE.BoxGeometry(10, 5, 25);
-    var mat = new THREE.MeshPhongMaterial({
-        color: Color.plane,
-        shading: THREE.FlatShading
-    });
-    var shape = new THREE.Mesh(geom, mat);
+    var shape = new THREE.Mesh(new THREE.BoxGeometry(10, 5, 25), matMain);
     shape.position.set(10, -10, 0);
     this.mesh.add(shape);
     // 前轮
@@ -179,45 +201,34 @@ var Plane = function(){
     wheelRight.position.set(10, -14, -7);
     this.mesh.add(wheelRight);
     // 机翼
-    var geomWing = new THREE.BoxGeometry(15, 3, 70);
-    var matWing = new THREE.MeshPhongMaterial({
-         color: Color.plane,
-         shading: THREE.FlatShading
-    });
-    var wing = new THREE.Mesh(geomWing, matWing);
+    var wing = new THREE.Mesh(new THREE.BoxGeometry(15, 3, 70), matMain);
     wing.position.y = 3;
     wing.castShadow = true;
     wing.receiveShadow = true;
     this.mesh.add(wing);
     // 机头
     var geomEngine = new THREE.BoxGeometry(10, 25, 25);
-    var matEngine = new THREE.MeshPhongMaterial({
-         color: 0xffffff,
+    var matSub = new THREE.MeshPhongMaterial({
+         color: Color.planeSub,
          shading: THREE.FlatShading
     });
-    var engine = new THREE.Mesh(geomEngine, matEngine);
+    var engine = new THREE.Mesh(geomEngine, matSub);
     engine.position.x = 20;
     engine.castShadow = true;
     engine.receiveShadow = true;
     this.mesh.add(engine);
     // 螺旋桨支柱
-    var geomPillar = new THREE.BoxGeometry(8, 3, 3);
-    var matPillar = new THREE.MeshPhongMaterial({
-       color: 0x59332e,
+    var matPropeller = new THREE.MeshPhongMaterial({
+       color: 0x23190f,
        shading: THREE.FlatShading
     });
-    this.pillar = new THREE.Mesh(geomPillar, matPillar);
+    this.pillar = new THREE.Mesh(new THREE.BoxGeometry(8, 3, 3), matPropeller);
     this.pillar.position.x = 25;
     this.pillar.castShadow = true;
     this.pillar.receiveShadow = true;
     this.mesh.add(this.pillar);
     // 螺旋桨桨叶
-    var geomBlade = new THREE.BoxGeometry(1, 40, 5);
-    var matBlade = new THREE.MeshPhongMaterial({
-       color: 0x59332e,
-       shading: THREE.FlatShading
-    });
-    var blade0 = new THREE.Mesh(geomBlade, matBlade);
+    var blade0 = new THREE.Mesh(new THREE.BoxGeometry(1, 40, 5), matPropeller);
     blade0.position.x = 5;
     blade0.castShadow = true;
     blade0.receiveShadow = true;
@@ -228,12 +239,7 @@ var Plane = function(){
     this.pillar.add(blade0);
     this.pillar.add(blade1);
     // 机尾
-    var geomTail = new THREE.BoxGeometry(6, 10, 5);
-    var matTail = new THREE.MeshPhongMaterial({
-         color: Color.plane,
-         shading: THREE.FlatShading
-    });
-    var tail = new THREE.Mesh(geomTail, matTail);
+    var tail = new THREE.Mesh(new THREE.BoxGeometry(6, 10, 5), matSub);
     tail.position.set(-20, 8, 0);
     tail.castShadow = true;
     tail.receiveShadow = true;
@@ -243,12 +249,7 @@ var Plane = function(){
     wheel.position.set(-17, -10, -3);
     this.mesh.add(wheel);
 
-    var geomLink = new THREE.BoxGeometry(2, 10 ,2);
-    var matLink = new THREE.MeshPhongMaterial({
-        color: Color.plane,
-        shading: THREE.FlatShading
-    });
-    var link = new THREE.Mesh(geomLink, matLink);
+    var link = new THREE.Mesh(new THREE.BoxGeometry(2, 10 ,2), matMain);
     link.position.set(1.5, 5, 0);
     link.rotation.z = -0.3;
     wheel.add(link);
@@ -256,26 +257,30 @@ var Plane = function(){
 var plane;
 function createPlane() {
     plane = new Plane();
-//    plane.mesh.position.x = -50;
+    plane.mesh.position.x = -50;
     plane.mesh.position.y = 100;
-//    plane.mesh.scale.set(0.5, 0.5, 0.5);
+    plane.mesh.scale.set(0.5, 0.5, 0.5);
     scene.add(plane.mesh);
+}
+
+var targetY = 100;
+function mousemove(event) {
+    if(event.clientY < (height/2)) {
+        targetY = 100 + ((height/2)-event.clientY) / height * 150;
+    } else {
+        targetY = 100 - ( (event.clientY-(height/2)) / height * 100);
+    }
 }
 
 function loop() {
     sea.rotation.z += 0.01;
     sky.rotation.z += 0.005;
+    
     plane.pillar.rotation.x += 0.3;
+    plane.mesh.position.y += (targetY - plane.mesh.position.y) * 0.1;
+    plane.mesh.rotation.z = (targetY - plane.mesh.position.y) * 0.02;
+
     renderer.render(scene, camera);
     requestAnimationFrame(loop);
 }
 
-function mousemove(event) {
-    var y;
-    if(event.clientY < (height/2)) {
-        y = 100 + ((height/2)-event.clientY) / height * 150;
-    } else {
-        y = 100 - ( (event.clientY-(height/2)) / height * 100);
-    }
-    plane.mesh.position.y = y;
-}
