@@ -1,11 +1,12 @@
-window.addEventListener("load", init, false);
-function init() {
+window.onload = function() {
+    distance = document.getElementById("distance");
     createScene();
     createLight();
     createSea();
     createSky();
     createPlane();
     document.addEventListener("mousemove", mousemove, false);
+ //   createCoins();
     loop();
 }
 
@@ -142,26 +143,66 @@ function createSky() {
 var Coin = function() {
     var geom = new THREE.BoxGeometry(5, 5, 5);
     var mat = new THREE.MeshPhongMaterial({
-    color: Color.coin,
-    shininess: 0,  // 发光
-    specular: 0xffffff,  // 反射
-    shading: THREE.FlatShading
+        color: Color.coin,
+        shininess: 0,  // 发光
+        specular: 0xffffff,  // 反射
+        shading: THREE.FlatShading
     });
     this.mesh = new THREE.Mesh(geom,mat);
     this.mesh.castShadow = true;
     this.ang = 0;
     this.dis = 0;
 }
-
-var Coins = function(n){
+/*
+var Coins = function(){
     this.mesh = new THREE.Object3D();
     this.array = [];
+
+    var n = 1 + Math.round(Math.random()*7),
+        height = 900 + 50 * (-1+Math.random()*2),
+        amp = 15 + Math.round(Math.random()*10);
+
     for(var i=0; i<n; i++) {
         var coin = new Coin();
+        coin.ang = i * 0.02;
+        if(coin.angle > Math.PI*2) {
+            coin.ang -= Math.PI * 2;
+        }
+        coin.dis = height + Math.cos(i*0.5)*amp;
+        coin.mesh.position.x = Math.cos(coin.ang) * coin.dis;
+        coin.mesh.position.y = Math.sin(coin.ang) * coin.dis - 800;
+        coin.mesh.rotation.y += Math.random() * 0.1;
+        coin.mesh.rotation.z += Math.random() * 0.1;
+
         this.array.push(coin);
+        this.mesh.add(coin.mesh);
     }
 }
+*/
+function createCoins() {
+    var coins = new THREE.Object3D();
 
+    var n = 1 + Math.round(Math.random()*7),
+        height = 900 + 50 * (-1+Math.random()*2),
+        amp = 10 + Math.round(Math.random()*10);
+    for(var i=0; i<n; i++) {
+        var coin = new Coin();
+
+        coins.add(coin.mesh);
+
+        coin.ang = i * 0.02;
+        coin.dis = height + Math.cos(i*0.5)*amp;
+        coin.mesh.position.x = Math.cos(coin.ang) * coin.dis;
+        coin.mesh.position.y = Math.sin(coin.ang) * coin.dis - 800;
+     /*   coin.mesh.rotation.y += Math.random() * 0.1;
+        coin.mesh.rotation.z += Math.random() * 0.1;
+        this.array.push(coin); */
+        console.log(coin.mesh.position.x+","+coin.mesh.position.y);
+    }
+
+//    var coins = new Coins();
+    scene.add(coins);
+}
 
 
 var Plane = function(){
@@ -272,7 +313,20 @@ function mousemove(event) {
     }
 }
 
+var dis = 0,
+    newTime = new Date().getTime(),
+    oldTime = new Date().getTime();
+var distance;
 function loop() {
+    newTime = new Date().getTime();
+    dis += 0.01 * (newTime-oldTime);
+    oldTime = newTime;
+    distance.innerHTML = Math.floor(dis);
+
+    if(Math.floor(dis)%100==0) {
+        createCoins();
+    }
+
     sea.rotation.z += 0.01;
     sky.rotation.z += 0.005;
     

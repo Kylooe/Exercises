@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>点线动态背景效果</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style type="text/css">
+    body {
+      background-color: #102439;
+    }
+
+    canvas {
+      position: fixed;
+      top: 50px;
+      left: 50%;
+      margin-left: -400px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="800" height="600"></canvas>
+  <script type="text/javascript">
+    var canvas = document.getElementById("canvas"),
+        context = canvas.getContext("2d");
+    context.lineWidth = 2;
+    context.strokeStyle = "rgba(255,255,255,0.2)";
+    context.fillStyle = "#ffffff";
+    var poop = [];
+
+    var P = function(xc, yc, r) {
+        this.xc = xc;
+        this.yc = yc;
+        this.r = r;
+        this.theta = 0;
+        this.x = 0;
+        this.y = 0;
+        this.dt = 0;
+    };
+
+    P.prototype = {
+        show: function() {
+            this.x = this.xc + this.r * Math.cos(this.theta*Math.PI/180),
+            this.y = this.yc + this.r * Math.sin(this.theta*Math.PI/180);
+            context.fillRect(this.x, this.y, 3, 3);
+        },
+        move: function() {
+            this.dt = (this.dt)?this.dt:(Math.random()*2-1);
+            this.theta += this.dt;
+        },
+        drawLines: function() {
+            var num = poop.length;
+            context.beginPath();
+            for(let i=0; i<num; i++) {
+                var p = poop[i];
+                if(p!==this) {
+                    var dist = Math.sqrt(Math.pow(p.x-this.x,2)+Math.pow(p.y-this.y,2));
+                    if(dist<50) {
+                        context.moveTo(this.x, this.y);
+                        context.lineTo(p.x, p.y);
+                    }
+                }
+            }
+            context.stroke();
+        }
+    };
+
+    var render,
+        width = canvas.width,
+        height = canvas.height;
+    for(let i=0; i<200; i++) {
+        var r = Math.floor(Math.random()*50);
+        var p = new P(Math.random()*(width-r)+r, Math.random()*(height-r)+r, r);
+        poop.push(p);
+    }
+
+    var num = poop.length;
+    var draw = function() {
+        context.clearRect(0, 0, width, height);
+        for(let i=0; i<num; i++) {
+            var particle = poop[i];
+            particle.show();
+            particle.move();
+            particle.drawLines();
+        }
+        render = requestAnimationFrame(draw);
+    }
+    render = requestAnimationFrame(draw);
+
+  </script>
+</body>
+</html>
