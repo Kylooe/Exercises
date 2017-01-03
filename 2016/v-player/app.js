@@ -2,44 +2,53 @@ var canvas = document.getElementById("canvas"),
     context = canvas.getContext("2d"),
     bg = document.getElementById("bg");
 
-window.onload = function() {
-    var player = new Player();
-    player.prepareAPI();
-    player.setFile();
-    player.controller();
-    window.addEventListener("resize", function() {
-        context.restore();
-        if(window.innerHeight<600) {
-            canvas.width = window.innerWidth;
-            canvas.height = 600;
-            bg.height = 600;
-            player.radius = 200;
-            context.save();
-            player.visualiseMode==="normal" ? context.translate(0,0) : context.translate(canvas.width/2, window.innerHeight/2);
-        }else {
-            player.init();
-        }
-    }, false);
-};
 
-var Player = function() {
-    //this.context = canvas.getContext("2d"),
-    this.audioContext = null,
-    this.audio = null,
-    this.list = [],
-    this.shuffledList = [],
-    this.order = -1,
-    this.currentOrder = 0,
-    this.playing = false,
-    this.time = null,
-    this.volume = 0.5,
-    this.animation = null,
-    this.visualiseMode = "normal",
-    this.radius = 0
-};
 
-Player.prototype = {
-    prepareAPI: function() {
+class Player {
+    constructor() {
+    /*    const defaultOption = {
+            div: document.querySelector('.v-player'),
+            autoplay: false,
+            volume: 0.5,
+            playMode: 'order',
+            visualEffect: 'normal'
+        };
+        for (let key in defaultOption) {
+            if (!option.hasOwnProperty(key)) {
+                option[key] = defaultOption[key];
+            }
+        }*/
+
+        //this.context = canvas.getContext("2d"),
+        this.audioContext = null;
+        this.audio = new Audio();
+        this.list = [];
+        this.shuffledList = [];
+        this.order = -1;
+        this.currentOrder = 0;
+        this.playing = false;
+        this.time = null;
+        this.volume = 0.5;
+        this.playMode = "order";
+        this.animation = null;
+        this.visualiseMode = "normal";
+        this.radius = 0;
+        this.icon = {
+            play: '<i class="iconfontyyy icon-play" aria-hidden="true"></i>',
+            pause: '<i class="iconfontyyy icon-pause" aria-hidden="true"></i>',
+            mode: [
+                '<i class="iconfontyyy icon-order" aria-hidden="true"></i>',
+                '<i class="iconfontyyy icon-circulation" aria-hidden="true"></i>',
+                '<i class="iconfontyyy icon-random" aria-hidden="true"></i>',
+                '<i class="iconfontyyy icon-sigle" aria-hidden="true"></i>'
+            ],
+            vol: '<i class="iconfontyyy icon-volume" aria-hidden="true"></i>',
+            mute: '<i class="iconfontyyy icon-mute" aria-hidden="true"></i>'
+        };
+
+    }
+
+    prepareAPI() {
         window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext;
         window.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame;
         window.cancelAnimationFrame = window.cancelAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame;
@@ -51,63 +60,228 @@ Player.prototype = {
             console.log(err);
         }
         console.log(this.audioContext.sampleRate);
-    },
-    init: function() {
+    }
+
+    init() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         bg.height = window.innerHeight;
         this.radius = canvas.height/3;
         context.save();
         this.visualiseMode==="normal" ? context.translate(0,0) : context.translate(canvas.width/2, canvas.height/2);
-    },
-    setFile: function() {
-        var music = document.getElementById("music"),
-            image = document.getElementById("image"),
-            list = document.querySelector("#play-list ul"),
-            that = this;
-        music.addEventListener("change", function() {
-            if(this.files.length !== 0) {
-                for(let f of this.files) {
-                    let name = f.name.replace(/\.(?:mp3|ogg|mp4|wav)$/i, "");
-                    that.list.push({
-                        src: f,
-                        name: name
-                    });
-                    list.innerHTML += "<li>" + f.name + "</li>";
-                    that.order++;
-                    if(!that.playing) {
-                        that.loadAudio(f);
-                        document.querySelector("h1").innerHTML = name;
-                    }
+    }
+
+    controller() {
+        const controller = document.getElementById('controller');
+        
+        const [mode, pre, pause, next, vol] = controller.querySelectorAll('a');
+
+        // 播放模式控制
+        let m = 0;
+        const playMode = ['order', 'circulation', 'random', 'single'];
+        mode.addEventListener('click', () => {
+            m = (m===3) ? 0 : m+1;
+            mode.innerHTML = this.icon.mode[m];
+            this.playMode = playMode[m];
+        }, false);
+
+
+        // 音乐控制
+        pause.addEventListener('click', () => {
+            if(this.playing) {
+                if(this.audio.paused) {
+                    this.play(this.audio);
+                }else {
+                    this.audio.pause();
+                    clearInterval(this.time);
                 }
+                pause.innerHTML = this.audio.paused ? this.icon.play : this.icon.pause;
             }
         }, false);
 
-        image.addEventListener("change", function() {
-            var file = image.files[0],
+        const trackRestart = (file) => {
+            this.audio.pause();
+            this.audio = null;
+            clearInterval(this.time);
+            cancelAnimationFrame(this.animation);
+            this.audio = new Audio();
+            this.loadAudio(file.src);
+            document.querySelector('h1').innerHTML = file.name;
+            pause.innerHTML = this.icon.pause;
+        };
+
+        const shuffle = () => {
+            if(this.shuffledList.length===0) {
+                for(let i=this.order; i>=0; i--) {
+                    this.shuffledList[i] = i;
+                }
+            }
+            let randomOrder = Math.floor(Math.random()*this.shuffledList.length),
+                order = this.shuffledList.splice(randomOrder,1);
+            return order;
+        };
+
+        // 下一曲目
+        const then = () => {
+            if(this.playMode==='random') {
+                this.currentOrder = shuffle();
+            }else if(this.playMode==='order'&&this.currentOrder===this.order){
+                return;
+            }else {
+                this.currentOrder = (this.currentOrder===this.order) ? 0 : ++this.currentOrder;
+            }
+            trackRestart(this.list[this.currentOrder]);
+        };
+
+        pre.addEventListener('click', () => {
+            if(this.playMode==='random') {
+                this.currentOrder = shuffle();
+            }else if(this.playMode==='order'&&this.currentOrder===0){
+                return;
+            }else {
+                this.currentOrder = (this.currentOrder===0) ? this.order : --this.currentOrder;
+            }
+            trackRestart(this.list[this.currentOrder]); 
+        }, false);
+
+        next.addEventListener('click', () => {
+            then();
+        }, false);
+
+
+        //音量控制
+        const volumeBar = controller.querySelector('input.volume'), 
+              volumeBtn = controller.querySelector('a.volume');
+        volumeBar.addEventListener('input', () => {
+            if(this.audio.volume===0) volumeBtn.innerHTML = this.icon.vol;
+            this.volume = volumeBar.value/10;
+            this.audio.volume = this.volume;
+        }, false);
+
+        volumeBtn.addEventListener('click', () => {
+            if(this.audio.volume) {
+                volumeBtn.innerHTML = this.icon.mute;
+                this.volume = 0;
+            }else {
+                volumeBtn.innerHTML = this.icon.vol;
+                this.volume = volumeBar.value/10;
+            }
+            this.audio.volume = this.volume;
+             /*   volumeBtn.innerHTML = (this.audio.muted) ? this.icon.vol : this.icon.mute;
+                this.audio.volume = (this.audio.muted) ? this.volume : 0;*/
+        }, false);
+
+
+        // 时间进度条
+        const playedBar = document.querySelector('.played-bar');
+        playedBar.addEventListener('input', () => {
+            this.audio.currentTime = parseFloat(playedBar.value) / 1000 * this.audio.duration;
+        }, false);
+
+
+        // 选择背景
+        const image = controller.querySelector('.image');
+        image.addEventListener('change', function() {
+            let file = this.files[0],
                 fr = new FileReader();
             window.innerHeight<window.innerWidth ? bg.width = window.innerWidth : bg.height = window.innerHeight;
-            fr.onload = function() {
+            fr.onload = () => {
                 bg.src = fr.result;
             };
             if(file) {
                 fr.readAsDataURL(file);
             }
         }, false);
-    },
 
-    loadAudio: function(file) {
-        var fileReader = new FileReader();
-        this.audio = new Audio();
+
+        // 选择本地音乐
+        const music = controller.querySelector('.music'),
+              playList = controller.querySelector('.play-list ul');
+        music.addEventListener('change', () => {
+            if(music.files.length !== 0) {
+                for(let f of music.files) {
+                    let name = f.name.replace(/\.(?:mp3|ogg|mp4|wav)$/i, '');
+                    this.list[++this.order] = {
+                        src: f,
+                        name: name
+                    };
+                    playList.innerHTML += `<li>${name}</li>`;
+                //    this.order++;
+                    if(!this.playing) {
+                        this.loadAudio(f);
+                        document.querySelector('h1').innerHTML = name;
+                    }
+                }
+            }
+        }, false);
+
+        // 曲目选择
+        let tracks = playList.getElementsByTagName('li');
+        playList.addEventListener('click', (e) => {
+            let target = e.target;
+            for(let i=tracks.length; i>=0; i--) {
+                if(target===tracks[i]) {
+                    this.currentOrder = i;
+                    trackRestart(this.list[i]);
+                }
+            }
+        }, false);
+
+
+        // 列表开关
+        const listBtn = controller.querySelectorAll('a.toggle'),
+              play = controller.querySelector('.play-list'),
+              effect = controller.querySelector('.effect-list');
+        for(let t of listBtn) {
+            t.addEventListener('click', function() {
+                let list = this.nextSibling.nextSibling;
+                if(list.classList.contains('off')) {
+                    play.classList.add('off');
+                    effect.classList.add('off');
+                }
+                list.classList.toggle('off');
+            }, false);
+        }
+
+
+        // 可视化效果选择
+        const ul = controller.querySelector(".effect-list");
+        ul.addEventListener('click', (e) => {
+            let target = e.target;
+            context.restore();
+            context.save();
+            switch(target.id) {
+                case "normal":
+                    context.translate(0,0);
+                    this.visualiseMode = "normal";
+                    break;
+                case "circle":
+                    context.translate(canvas.width/2, canvas.height/2);
+                    this.visualiseMode = "circle";
+                    break;
+                case "concentric":
+                    context.translate(canvas.width/2, canvas.height/2);
+                    this.visualiseMode = "concentric";
+                    break;
+                case "ring":
+                    context.translate(canvas.width/2, canvas.height/2);
+                    this.visualiseMode = "ring";
+                    break;
+            }
+        }, false);
+    }
+
+    loadAudio(file) {
+        let fileReader = new FileReader();
         this.audio.volume = this.volume;
         this.playing = true;
-        var that = this;
         fileReader.readAsArrayBuffer(file);
-        fileReader.onload = function(e) {
-            var audioContext = that.audioContext;
-            that.audio.src = URL.createObjectURL(file);
-            that.analyze(audioContext, that.audio);
-        }
+
+        fileReader.onload = (e) => {
+            let audioContext = this.audioContext;
+            this.audio.src = URL.createObjectURL(file);
+            this.analyze(audioContext, this.audio);
+        };
         /*
         var fileReader = new FileReader();
         var that = this;  // 这里将当前的this也就是Player对象赋值给that，以防下面函数中的this指代的对象改变
@@ -120,24 +294,22 @@ Player.prototype = {
         };
         fileReader.readAsArrayBuffer(file);
         */
-    },
-    analyze: function(audioContext, audio) {
-        var audioSource = audioContext.createMediaElementSource(audio),
+    }
+
+    analyze(audioContext, audio) {
+        let audioSource = audioContext.createMediaElementSource(audio),
             analyser = audioContext.createAnalyser();
         analyser.fftSize = 4096;
         audioSource.connect(analyser);
         analyser.connect(audioContext.destination);
 
-        audio.play();
-        this.updateTime(audio);
+        this.play(audio);
         this.visualise(analyser);
         
-        var that = this;
-        audio.addEventListener("ended", function() {
-            that.playing = false;
-            cancelAnimationFrame(that.animation);
-            that.init();
-
+        audio.addEventListener('ended', () => {
+            this.playing = false;
+            cancelAnimationFrame(this.animation);
+            this.init();
         }, false);
 
         /*
@@ -162,66 +334,67 @@ Player.prototype = {
             that.init();
         };
         */
-    },
-    visualise: function(analyser) {
-        var dataArray = new Uint8Array(analyser.frequencyBinCount),  // 分析的是二进制数据，所以需要使用Uint8Array类型的数组来存储，常用长度为1024
-            that = this;
+    }
+
+    visualise(analyser) {
+        let dataArray = new Uint8Array(analyser.frequencyBinCount);  // 分析的是二进制数据，所以需要使用Uint8Array类型的数组来存储，常用长度为1024
         
-        var render = function() {
-        //    var num ...
-            switch(that.visualiseMode) {
+        const render = () => {
+            switch(this.visualiseMode) {
                 case "normal":
-                    that.visualise_normal(analyser, dataArray);
+                    this.visualise_normal(analyser, dataArray);
                     break;
                 case "circle":
-                    that.visualise_circle(analyser, dataArray);
+                    this.visualise_circle(analyser, dataArray);
                     break;
                 case "concentric":
-                    that.visualise_concentric(analyser, dataArray);
+                    this.visualise_concentric(analyser, dataArray);
                     break;
                 case "line":
-                    that.visualise_line(analyser);
+                    this.visualise_line(analyser);
                     break;
                 case "ring":
-                    that.visualise_ring(analyser, dataArray);
+                    this.visualise_ring(analyser, dataArray);
                     break;
             }
-            that.animation = requestAnimationFrame(render);
+            this.animation = requestAnimationFrame(render);
         }
         this.animation = requestAnimationFrame(render);
 
-    },
-    visualise_normal: function(analyser, dataArray) {
-        var width = 5,
-            gap = 5,
-            num = canvas.width / (width+gap);
+    }
+
+    visualise_normal(analyser, dataArray) {
+        const width = 5,
+              gap = 5;
+        let num = canvas.width / (width+gap);
 
         analyser.getByteFrequencyData(dataArray);  // 分析频谱并将当前的频域数据返回到Uint8Array中
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.fillStyle = "rgba(255,255,255,0.6)";
         
 
-        stepAfter = Math.round(200/num);  // 采样步长
-        stepBefore = Math.round((dataArray.length*0.8-200)/num);
+        let stepAfter = Math.round(200/num),  // 采样步长
+            stepBefore = Math.round((dataArray.length*0.8-200)/num);
 
-        for(var i=0; i<num; i++) {
+        for(let i=0; i<num; i++) {
             context.save();
-            var valueAfter = dataArray[i*stepAfter];  // 相应频率的幅度值，物理意义为响度
-            var valueBefore = dataArray[i*stepBefore+200];
+            let valueAfter = dataArray[i*stepAfter];  // 相应频率的幅度值，物理意义为响度
+            let valueBefore = dataArray[i*stepBefore+200];
             context.fillRect(i*(width+gap), canvas.height-valueAfter*2, width, valueAfter*2);
             
             context.fillStyle = "rgb(255,255,255)";
             context.fillRect(i*(width+gap), canvas.height-valueBefore, width, valueBefore);
             context.restore();
         }
-    },
-    visualise_circle: function(analyser, dataArray) {
-        var r = this.radius,
+    }
+
+    visualise_circle(analyser, dataArray) {
+        const num = 100,  // 柱条数目
+              ang = Math.PI / num;
+        let r = this.radius,
             c = 2*Math.PI*r,
-            num = 100,  // 柱条数目
-            ang = Math.PI / num,
-            width = c / (num*2+1);
-        var step = Math.round((dataArray.length*0.8-200)/num);
+            width = c / (num*2+1),
+            step = Math.round((dataArray.length*0.8-200)/num);
 
         analyser.getByteFrequencyData(dataArray);
         context.clearRect(-canvas.width/2, -canvas.height/2, canvas.width, canvas.height);
@@ -245,8 +418,9 @@ Player.prototype = {
             context.restore();
         }
 
-    },
-    visualise_concentric: function(analyser, dataArray) {
+    }
+
+    visualise_concentric(analyser, dataArray) {
         var num = dataArray.length;
         analyser.getByteFrequencyData(dataArray);
         context.clearRect(-canvas.width/2, -canvas.height/2, canvas.width, canvas.height);
@@ -259,28 +433,28 @@ Player.prototype = {
             context.stroke();  // 画空心圆
             context.closePath();
         }
-    },
-    visualise_line: function(analyser, dataArray) {
-        var width = canvas.width*1.0 / 512,
-            y = 0;
+    }
 
-            analyser.getByteTimeDomainData(dataArray);
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            context.lineWidth = 2;
-            context.strokeStyle = "rgb(255,0,0)";
-            context.beginPath();
-            var x = 0;
-            for(var i=0; i<512; i++) {
-                y = dataArray[i];
-                if(i===0) {
-                    context.moveTo(x,y-128);
-                }else {
-                    context.lineTo(x,y-128);
-                }
-                x += width;
+    visualise_line(analyser, dataArray) {
+        let width = canvas.width*1.0 / 512,
+            x = 0,
+            y = 0;
+        analyser.getByteTimeDomainData(dataArray);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.lineWidth = 2;
+        context.strokeStyle = "rgb(255,0,0)";
+        context.beginPath();
+        for(let i=0; i<512; i++) {
+            y = dataArray[i];
+            if(i===0) {
+                context.moveTo(x,y-128);
+            }else {
+                context.lineTo(x,y-128);
             }
-            context.stroke();
-    },
+            x += width;
+        }
+        context.stroke();
+    }
  /*   visualise_double: function(analyser, dataArray) {
         analyser.getByteFrequencyData(dataArray);
         context.clearRect(-canvas.width/2, -canvas.height/2, canvas.width, canvas.height);
@@ -316,12 +490,13 @@ Player.prototype = {
         }
 
     }, */
-    visualise_ring: function(analyser, dataArray) {
+
+    visualise_ring(analyser, dataArray) {
         analyser.getByteFrequencyData(dataArray);
         context.clearRect(-canvas.width/2, -canvas.height/2, canvas.width, canvas.height);
         context.fillStyle = "rgba(255,255,255,0.6)";
 
-        var r = this.radius,
+        let r = this.radius,
             cOut = 2 * Math.PI * r,
             cIn = 2 * Math.PI * (r-100),
             num = 200,
@@ -332,199 +507,26 @@ Player.prototype = {
 
         for(let i=0; i<num; i++) {
             context.save();
-            var value = dataArray[i*step +100];
+            let value = dataArray[i*step +100];
             context.rotate(ang*i);
             context.fillRect(0, -r-5, widthOut/2, value/255*100+5);
             context.fillStyle = "rgb(255,255,255)";
             context.fillRect(0, -r+100 - value/255*100-2, widthIn/2, value/255*100+2);
             context.restore();
         }
-    },
-
-    controller: function() {
-        var controller = document.getElementById("controller");
-        
-        var mode = document.querySelectorAll("a.controls")[0],
-            pre = document.querySelectorAll("a.controls")[1],
-            pause = document.querySelectorAll("a.controls")[2],
-            next = document.querySelectorAll("a.controls")[3],
-            vol = document.querySelectorAll("a.controls")[4];
-
-        var that = this;
-
-        // 播放模式控制
-        var m=0,
-            icon = [
-                '<i class="fa fa-long-arrow-right" aria-hidden="true"></i>',
-                '<i class="fa fa-retweet" aria-hidden="true"></i>',
-                '<i class="fa fa-random" aria-hidden="true"></i>',
-                '1'
-            ],
-            playMode = ["order","circulation","random","single"],
-            currentMode = "order";
-        mode.onclick = function() {
-            m = (m===3) ? 0 : m+1;
-            this.innerHTML = icon[m];
-            currentMode = playMode[m];
-        }
-
-        // 音乐控制
-        function trackRestart(file) {
-            that.audio.pause();
-            that.audio = null;
-            clearInterval(that.time);
-            cancelAnimationFrame(that.animation);
-            that.loadAudio(file.src);
-            document.querySelector("h1").innerHTML = file.name;
-            pause.innerHTML = '<i class="fa fa-pause" aria-hidden="true"></i>';
-        }
-
-        function shuffle() {
-            if(that.shuffledList.length===0) {
-                for(let i in that.list) {
-                    that.shuffledList[i] = i;
-                }
-            }
-            let randomOrder = Math.floor(Math.random()*that.shuffledList.length),
-                order = that.shuffledList.splice(randomOrder,1);
-            return order;
-        }
-
-        pause.onclick = function() {
-            if(that.playing) {
-                if(that.audio.paused) {
-                    that.audio.play();
-                    that.updateTime(that.audio);
-                }else {
-                    that.audio.pause();
-                    clearInterval(that.time);
-                }
-                this.innerHTML = that.audio.paused?'<i class="fa fa-play" aria-hidden="true"></i>':'<i class="fa fa-pause" aria-hidden="true"></i>';
-            }
-        };
-
-        pre.onclick = function() {
-            
-         /*   if(currentMode==="order"&&that.currentOrder===0) return;
-
-            if(currentMode==="random") {
-                
-
-            }*/
-
-            that.currentOrder = (that.currentOrder===0)?that.order:--that.currentOrder;
-            trackRestart(that.list[that.currentOrder]); 
-        };
-        next.onclick = function() {
-            then();
-        };
-
-        function then() {
-            let order = 0;
-            if(currentMode==="random") {
-                order = shuffle();
-            }else if(currentMode==="order"&&that.currentOrder===that.order){
-                return;
-            }else {
-                order = (that.currentOrder===that.order) ? 0 : ++that.currentOrder;
-            }
-            trackRestart(that.list[order]);
-        }
-
-    //    this.audio.addEventListener("ended", then, false);
-
-        //音量控制
-        var volumeBar = document.getElementById("volume-bar");
-        volumeBar.addEventListener("input", function() {
-            that.volume = this.value/10;
-            that.audio.volume = that.volume;
-        }, false);
-        var volumeBtn = document.querySelector("a.volume");
-        volumeBtn.addEventListener("click", function() {
-                this.innerHTML = (that.audio.volume===0) ? '<i class="fa fa-volume-up" aria-hidden="true"></i>' : '<i class="fa fa-volume-off" aria-hidden="true"></i>';
-                that.audio.volume = (that.audio.volume===0) ? that.volume : 0;
-        }, false);
+    }
 
 
-        // 曲目选择
-        var playList = document.querySelector("#play-list ul"),
-            tracks = playList.getElementsByTagName("li");
-        playList.addEventListener("click", function(e) {
-            var target = e.target;
-       /*     Array.from(tracks).forEach(function() {
-                console.log(this);
-            });*/
-
-            for(let i=0; i<tracks.length; i++) {
-                if(target===tracks[i]) {
-                    that.currentOrder = i;
-                    trackRestart(that.list[i]);
-                }
-            }
-        }, false);
-
-        // 时间进度条
-        var playedBar = document.getElementById('played-bar');
-        playedBar.addEventListener("input", function() {
-            that.audio.currentTime = parseFloat(this.value) / 1000 * that.audio.duration;
-        }, false);
-
-
-        // 列表开关
-        let listBtn = document.querySelectorAll("a.toggle"),
-            play = document.getElementById("play-list"),
-            effect = document.getElementById("effect");
-        for(var t of listBtn) {
-            t.addEventListener('click', function() {
-                if(this.nextSibling.nextSibling.className) {
-                    play.className = 'off';
-                    effect.className = 'off';
-                    this.nextSibling.nextSibling.className = '';
-                }else {
-                    this.nextSibling.nextSibling.className = 'off';
-                }
-            }, false);
-        }
-
-
-        // 可视化效果选择
-        var ul = document.getElementById("effect");
-        var that = this;
-        ul.addEventListener('click', function(e) {
-            var target = e.target;
-            context.restore();
-            context.save();
-            switch(target.id) {
-                case "normal":
-                    context.translate(0,0);
-                    that.visualiseMode = "normal";
-                    break;
-                case "circle":
-                    context.translate(canvas.width/2, canvas.height/2);
-                    that.visualiseMode = "circle";
-                    break;
-                case "concentric":
-                    context.translate(canvas.width/2, canvas.height/2);
-                    that.visualiseMode = "concentric";
-                    break;
-                case "ring":
-                    context.translate(canvas.width/2, canvas.height/2);
-                    that.visualiseMode = "ring";
-                    break;
-            }
-        }, false);
-    },
-
-    updateTime: function(audio) {
-        var played = document.getElementById('played'),
-            total = document.getElementById('total'),
-            playedBar = document.getElementById('played-bar');
-        var that = this;
-        function add0(num) {
-            return num<10 ? "0"+num : num;
-        }
-        function format(num) {
-            var m = Math.floor(num/60),
+    play(audio) {
+        const played = document.getElementById('played'),
+              total = document.getElementById('total'),
+              playedBar = document.querySelector('.played-bar'),
+              pause = document.querySelectorAll('a')[2];
+        audio.play();
+        pause.innerHTML = this.icon.pause;
+        const add0 = (num) => num<10 ? `0${num}` : num;
+        const format = (num) => {
+            let m = Math.floor(num/60),
                 s = Math.floor(num - m*60);
             return add0(m) + ":" + add0(s);
         }
@@ -533,14 +535,32 @@ Player.prototype = {
             total.innerHTML = format(audio.duration);
             playedBar.value = audio.currentTime/audio.duration*1000;
         }, 100);
-        audio.addEventListener("ended", function() {
-            clearInterval(that.time);
+        audio.addEventListener("ended", () => {
+            clearInterval(this.time);
             played.innerHTML = "00:00";
-            playedBar. value = 0;
+            playedBar.value = 0;
         }, false);
 
     }
 
 
-};
+}
 
+window.onload = function() {
+    var player = new Player();
+    player.prepareAPI();
+    player.controller();
+    window.addEventListener('resize', function() {
+        context.restore();
+        if(window.innerHeight<600) {
+            canvas.width = window.innerWidth;
+            canvas.height = 600;
+            bg.height = 600;
+            player.radius = 200;
+            context.save();
+            player.visualiseMode==='normal' ? context.translate(0,0) : context.translate(canvas.width/2, window.innerHeight/2);
+        }else {
+            player.init();
+        }
+    }, false);
+};

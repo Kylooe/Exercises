@@ -1,7 +1,8 @@
 body {
-  background-color: black;
+  background: #444;
   color: white;
   margin: 0;
+  font-family: 'Microsoft Yahei';
 }
 
 div#wrap, canvas, img {
@@ -58,10 +59,12 @@ a {
   width: 20px;
   height: 20px;
   text-align: center;
+  line-height: 20px;
   color: rgba(255,255,255,.4);
   border-radius: 20px;
   border: 2px solid transparent;
   padding: 5px;
+  text-decoration: none;
 }
 
 a:hover {
@@ -85,7 +88,7 @@ div.volume {
   display: none;
   position: absolute;
   top: 0;
-  left: 176px;
+  left: 170px;
   background-color: rgba(255,255,255,.2);
   border-radius: 20px;
   border: 2px solid white;
@@ -110,19 +113,17 @@ input[type="file"] {
   cursor: pointer;
 }
 
-input[type="file"]#image {
+input[type="file"].image {
   width: 25px;
   height: 25px;
 }
 
-div#play-list, 
-ul#effect {
+div.play-list, 
+ul.effect-list {
   position: absolute;
   top: 90px;
-  left: 110px;
-  margin-left: -110px;
+  left: 50%;
   padding: 0;
-  width: 100%;
   background-color: #ccc;
   cursor: pointer;
   text-align: center;
@@ -130,13 +131,20 @@ ul#effect {
   border-radius: 5px;
 }
 
-#effect {
+.play-list {
+  width: 250px;
+  margin-left: -125px;
+}
+
+.effect-list {
+  width: 100%;
   margin-top: 0;
+  margin-left: -110px;
   background-color: white;
 }
 
-#play-list:before, 
-#effect:before {
+.play-list:before, 
+.effect-list:before {
   content: '';
   width: 0;
   height: 0;
@@ -147,31 +155,31 @@ ul#effect {
   top: -30px;
 }
 
-#play-list:before {
-  left: 95px;
+.play-list:before {
+  left: 110px;
 }
 
-#effect:before {
+.effect-list:before {
   left: 135px;
 }
 
-input[type="file"]#music {
+input[type="file"].music {
   height: 45px;
   width: 100%;
   z-index: 120;
 }
 
-div#play-list a {
+div.play-list a {
   margin: 5px auto;
   color: black;
 }
 
-#music:hover + a {
+div.play-list .music:hover + a {
   border-color: white;
   color: white;
 }
 
-#play-list ul {
+.play-list ul {
   text-align: left;
   padding: 0;
   margin: 0;
@@ -206,13 +214,13 @@ canvas {
 }
 
 /* change the range bar style */
-#played-bar {
+.played-bar {
   width: 100%;
   transform: translateY(-50%);
   margin: 0;
 }
 
-#volume-bar {
+input.volume {
   width: 60px;
 }
 
@@ -230,7 +238,7 @@ input[type=range]::-webkit-slider-runnable-track {
   background: white;
 }
 
-input[type=range]#volume-bar::-webkit-slider-runnable-track {
+input[type=range].volume::-webkit-slider-runnable-track {
   height: 2px;
 }
 
@@ -239,23 +247,22 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 }
 
 input[type=range]::-webkit-slider-thumb {
-  box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+  -webkit-appearance: none;
   border-radius: 50%;
   background: white;
   cursor: pointer;
-  -webkit-appearance: none;
 }
 
-input[type=range]#played-bar::-webkit-slider-thumb {
+input[type=range].played-bar::-webkit-slider-thumb {
   height: 20px;
   width: 20px;
   margin-top: -9px;
 }
 
-input[type=range]#volume-bar::-webkit-slider-thumb {
+input[type=range].volume::-webkit-slider-thumb {
   height: 10px;
   width: 10px;
-  margin-top: -5px;
+  margin-top: -4px;
 }
 
 
@@ -271,13 +278,13 @@ input[type=range]::-moz-range-thumb {
   cursor: pointer;
 }
 
-input[type=range]#played-bar::-moz-range-thumb {
+input[type=range].played-bar::-moz-range-thumb {
   height: 20px;
   width: 20px; 
   border-radius: 10px;
 }
 
-input[type=range]#volume-bar::-moz-range-thumb {
+input[type=range].volume::-moz-range-thumb {
   height: 10px;
   width: 10px;
   border-radius: 5px;
