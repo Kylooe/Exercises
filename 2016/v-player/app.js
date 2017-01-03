@@ -34,16 +34,16 @@ class Player {
         this.visualiseMode = "normal";
         this.radius = 0;
         this.icon = {
-            play: '<i class="iconfontyyy icon-play" aria-hidden="true"></i>',
-            pause: '<i class="iconfontyyy icon-pause" aria-hidden="true"></i>',
+            play: '<i class="iconfont icon-play" aria-hidden="true"></i>',
+            pause: '<i class="iconfont icon-pause" aria-hidden="true"></i>',
             mode: [
-                '<i class="iconfontyyy icon-order" aria-hidden="true"></i>',
-                '<i class="iconfontyyy icon-circulation" aria-hidden="true"></i>',
-                '<i class="iconfontyyy icon-random" aria-hidden="true"></i>',
-                '<i class="iconfontyyy icon-sigle" aria-hidden="true"></i>'
+                '<i class="iconfont icon-order" aria-hidden="true"></i>',
+                '<i class="iconfont icon-circulation" aria-hidden="true"></i>',
+                '<i class="iconfont icon-random" aria-hidden="true"></i>',
+                '<i class="iconfont icon-single" aria-hidden="true"></i>'
             ],
-            vol: '<i class="iconfontyyy icon-volume" aria-hidden="true"></i>',
-            mute: '<i class="iconfontyyy icon-mute" aria-hidden="true"></i>'
+            vol: '<i class="iconfont icon-volume" aria-hidden="true"></i>',
+            mute: '<i class="iconfont icon-mute" aria-hidden="true"></i>'
         };
 
     }
@@ -99,53 +99,19 @@ class Player {
             }
         }, false);
 
-        const trackRestart = (file) => {
-            this.audio.pause();
-            this.audio = null;
-            clearInterval(this.time);
-            cancelAnimationFrame(this.animation);
-            this.audio = new Audio();
-            this.loadAudio(file.src);
-            document.querySelector('h1').innerHTML = file.name;
-            pause.innerHTML = this.icon.pause;
-        };
-
-        const shuffle = () => {
-            if(this.shuffledList.length===0) {
-                for(let i=this.order; i>=0; i--) {
-                    this.shuffledList[i] = i;
-                }
-            }
-            let randomOrder = Math.floor(Math.random()*this.shuffledList.length),
-                order = this.shuffledList.splice(randomOrder,1);
-            return order;
-        };
-
-        // 下一曲目
-        const then = () => {
-            if(this.playMode==='random') {
-                this.currentOrder = shuffle();
-            }else if(this.playMode==='order'&&this.currentOrder===this.order){
-                return;
-            }else {
-                this.currentOrder = (this.currentOrder===this.order) ? 0 : ++this.currentOrder;
-            }
-            trackRestart(this.list[this.currentOrder]);
-        };
-
         pre.addEventListener('click', () => {
             if(this.playMode==='random') {
-                this.currentOrder = shuffle();
+                this.currentOrder = this.shuffle();
             }else if(this.playMode==='order'&&this.currentOrder===0){
                 return;
             }else {
                 this.currentOrder = (this.currentOrder===0) ? this.order : --this.currentOrder;
             }
-            trackRestart(this.list[this.currentOrder]); 
+            this.trackRestart(this.list[this.currentOrder]); 
         }, false);
 
         next.addEventListener('click', () => {
-            then();
+            this.then();
         }, false);
 
 
@@ -167,8 +133,6 @@ class Player {
                 this.volume = volumeBar.value/10;
             }
             this.audio.volume = this.volume;
-             /*   volumeBtn.innerHTML = (this.audio.muted) ? this.icon.vol : this.icon.mute;
-                this.audio.volume = (this.audio.muted) ? this.volume : 0;*/
         }, false);
 
 
@@ -219,10 +183,10 @@ class Player {
         let tracks = playList.getElementsByTagName('li');
         playList.addEventListener('click', (e) => {
             let target = e.target;
-            for(let i=tracks.length; i>=0; i--) {
+            for(let i=tracks.length-1; i>=0; i--) {
                 if(target===tracks[i]) {
                     this.currentOrder = i;
-                    trackRestart(this.list[i]);
+                    this.trackRestart(this.list[i]);
                 }
             }
         }, false);
@@ -250,7 +214,7 @@ class Player {
             let target = e.target;
             context.restore();
             context.save();
-            switch(target.id) {
+            switch(target.innerHTML) {
                 case "normal":
                     context.translate(0,0);
                     this.visualiseMode = "normal";
@@ -305,13 +269,6 @@ class Player {
 
         this.play(audio);
         this.visualise(analyser);
-        
-        audio.addEventListener('ended', () => {
-            this.playing = false;
-            cancelAnimationFrame(this.animation);
-            this.init();
-        }, false);
-
         /*
         var bufferSource = audioContext.createBufferSource(),
             analyser = audioContext.createAnalyser();
@@ -518,8 +475,8 @@ class Player {
 
 
     play(audio) {
-        const played = document.getElementById('played'),
-              total = document.getElementById('total'),
+        const played = document.querySelector('.played'),
+              total = document.querySelector('.total'),
               playedBar = document.querySelector('.played-bar'),
               pause = document.querySelectorAll('a')[2];
         audio.play();
@@ -535,14 +492,52 @@ class Player {
             total.innerHTML = format(audio.duration);
             playedBar.value = audio.currentTime/audio.duration*1000;
         }, 100);
+
         audio.addEventListener("ended", () => {
+            this.playing = false;
+            cancelAnimationFrame(this.animation);
             clearInterval(this.time);
             played.innerHTML = "00:00";
             playedBar.value = 0;
+            pause.innerHTML = this.icon.play;
+            this.init();
+            this.then();
         }, false);
-
     }
 
+    trackRestart(file) {
+        this.audio.pause();
+        this.audio = null;
+        clearInterval(this.time);
+        cancelAnimationFrame(this.animation);
+        this.audio = new Audio();
+        this.loadAudio(file.src);
+        document.querySelector('h1').innerHTML = file.name;
+        document.querySelectorAll('a')[2].innerHTML = this.icon.pause;
+    }
+
+    shuffle() {
+        if(this.shuffledList.length===0) {
+            for(let i=this.order; i>=0; i--) {
+                this.shuffledList[i] = i;
+            }
+        }
+        let randomOrder = Math.floor(Math.random()*this.shuffledList.length),
+            order = this.shuffledList.splice(randomOrder,1);
+        return order;
+    }
+
+    // 下一曲目
+    then() {
+        if(this.playMode==='random') {
+            this.currentOrder = shuffle();
+        }else if(this.playMode==='order'&&this.currentOrder===this.order){
+            return;
+        }else {
+            this.currentOrder = (this.currentOrder===this.order) ? 0 : ++this.currentOrder;
+        }
+        this.trackRestart(this.list[this.currentOrder]);
+    }
 
 }
 

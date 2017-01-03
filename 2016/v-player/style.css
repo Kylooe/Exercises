@@ -2,16 +2,17 @@ body {
   background: #444;
   color: white;
   margin: 0;
-  font-family: 'Microsoft Yahei';
+  font-family: "Microsoft Yahei";
+  user-select: none;
 }
 
-div#wrap, canvas, img {
+#wrapper, canvas, img {
   position: fixed;
 }
 
-div#wrap {
-  width: 400px;
-  height: 400px;
+#wrapper {
+  width: 450px;
+  height: 450px;
   top: 50%;
   left: 50%;
   background: rgba(0,0,0,.2);
@@ -21,32 +22,32 @@ div#wrap {
   z-index: 100;
 }
 
-div#wrap > * {
+#wrapper > * {
   position: absolute;
   top: 50%;
 }
 
-div#msg {
-  transform: translateY(-100%);
-  padding-bottom: 10px;
-  width: 100%;
-}
-
 h1 {
   text-align: center;
+  font-weight: lighter;
+  width: 100%;
+  transform: translateY(-200%);
 }
 
-h1 + span {
-  margin-left: 10px;
+span {
+  margin-top: -30px;
 }
 
-span:last-child {
-  position: absolute;
+span.played {
+  left: 10px;
+}
+
+span.total {
   right: 10px;
 }
 
-div#controller {
-  left: 200px;
+#controller {
+  left: 50%;
   margin-left: -110px;
   text-align: center;
   margin-top: 20px;
@@ -67,6 +68,9 @@ a {
   text-decoration: none;
 }
 
+.iconfont{
+  font-size: 20px;
+}
 a:hover {
   border-color: white;
   color: white;
@@ -93,6 +97,7 @@ div.volume {
   border-radius: 20px;
   border: 2px solid white;
   padding-left: 30px;
+  padding-right: 5px;
   cursor: pointer;
 }
 
@@ -161,6 +166,7 @@ ul.effect-list {
 
 .effect-list:before {
   left: 135px;
+  cursor: default;
 }
 
 input[type="file"].music {
@@ -222,6 +228,7 @@ canvas {
 
 input.volume {
   width: 60px;
+  margin: 5px;
 }
 
 input[type=range] {
@@ -291,39 +298,11 @@ input[type=range].volume::-moz-range-thumb {
 }
 
 
-input[type=range]::-ms-track {
+
+p {
+  position: absolute;
+  bottom: 0;
   width: 100%;
-  height: 12.8px;
-  cursor: pointer;
-  background: transparent;
-  border-color: transparent;
-  border-width: 39px 0;
-  color: transparent;
-}
-input[type=range]::-ms-fill-lower {
-  background: #ac51b5;
-  border: 0px solid #000101;
-  border-radius: 50px;
-  box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-}
-input[type=range]::-ms-fill-upper {
-  background: #ac51b5;
-  border: 0px solid #000101;
-  border-radius: 50px;
-  box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-}
-input[type=range]::-ms-thumb {
-  box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-  border: 0px solid #000000;
-  height: 20px;
-  width: 39px;
-  border-radius: 7px;
-  background: #65001c;
-  cursor: pointer;
-}
-input[type=range]:focus::-ms-fill-lower {
-  background: #ac51b5;
-}
-input[type=range]:focus::-ms-fill-upper {
-  background: #ac51b5;
+  text-align: center;
+  color: #666;
 }

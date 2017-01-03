@@ -4,50 +4,50 @@
   <title>visualize music</title>
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="./style.css">
-  <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_nej1blfp2t6v42t9.css">
+  <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_ni1yklzlvwyx2yb9.css">
 </head>
 <body>
-  <div id="wrap">
-    <div id="msg">
-      <h1>V-Player</h1>
-      <span id="played">00:00</span>
-      <span id="total">00:00</span>
-    </div>
-    <input type="range" class="played-bar" min="0" max="1000" value="0">
-    <div id="controller">
-      <a href="#"><i class="iconfontyyy icon-order" aria-hidden="true"></i></a>
-      <a href="#"><i class="iconfontyyy icon-pre" aria-hidden="true"></i></a>
-      <a href="#"><i class="iconfontyyy icon-play" aria-hidden="true"></i></a>
-      <a href="#"><i class="iconfontyyy icon-next" aria-hidden="true"></i></a>
-      <a class="volume" href="#"><i class="iconfontyyy icon-volume" aria-hidden="true"></i></a>
-      <div class="volume">
-        <input type="range" class="volume" min="0" max="10" value="5">
-      </div>
-      <a href="#">
-        <input type="file" class="image" accept="image/jpg, image/jpeg, image/bmp, image/png">
-        <i class="iconfontyyy icon-image" aria-hidden="true"></i>
-      </a>
+  <div class="v-player">
+    <div id="wrapper">
+        <h1>V-Player</h1>
+        <span class="played">00:00</span>
+        <span class="total">00:00</span>
+      <input type="range" class="played-bar" min="0" max="1000" value="0">
+      <div id="controller">
+        <a href="#"><i class="iconfont icon-order"></i></a>
+        <a href="#"><i class="iconfont icon-pre"></i></a>
+        <a href="#"><i class="iconfont icon-play"></i></a>
+        <a href="#"><i class="iconfont icon-next"></i></a>
+        <a class="volume" href="#"><i class="iconfont icon-volume"></i></a>
+        <div class="volume">
+          <input type="range" class="volume" min="0" max="10" value="5">
+        </div>
+        <a href="#">
+          <input type="file" class="image" accept="image/jpg, image/jpeg, image/bmp, image/png">
+          <i class="iconfont icon-image"></i>
+        </a>
 
-      <a class="toggle" href="#"><i class="iconfontyyy icon-music" aria-hidden="true"></i></a>
-      <div class="play-list off">
-        <input type="file" class="music" accept="audio/mp3, audio/ogg, audio/wav" multiple />
-        <a href="#"><i class="iconfontyyy icon-add" aria-hidden="true"></i></a>
-        <ul></ul>
-      </div>
+        <a class="toggle" href="#"><i class="iconfont icon-music"></i></a>
+        <div class="play-list off">
+          <input type="file" class="music" accept="audio/mp3, audio/ogg, audio/wav" multiple />
+          <a href="#"><i class="iconfont icon-add"></i></a>
+          <ul></ul>
+        </div>
 
-      <a class="toggle" href="#"><i class="iconfontyyy icon-effect" aria-hidden="true"></i></a>
-      <ul class="effect-list off">
-        <li id="normal">normal</li>
-        <li id="circle">circle</li>
-        <li id="concentric">concentric</li>
-        <li id="ring">ring</li>
-      </ul>
-      
+        <a class="toggle" href="#"><i class="iconfont icon-effect"></i></a>
+        <ul class="effect-list off">
+          <li>normal</li>
+          <li>circle</li>
+          <li>concentric</li>
+          <li>ring</li>
+        </ul>
+        
+      </div>
     </div>
+    <canvas id="canvas"></canvas>
+    <img id="bg">
+    <p>Kylooe 2016</p>
   </div>
-  <canvas id="canvas"></canvas>
-  <img id="bg">
-  
   <script type="text/javascript" src="./app.js"></script>
 </body>
 </html>
