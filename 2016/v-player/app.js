@@ -2,23 +2,8 @@ var canvas = document.getElementById("canvas"),
     context = canvas.getContext("2d"),
     bg = document.getElementById("bg");
 
-
-
 class Player {
     constructor() {
-    /*    const defaultOption = {
-            div: document.querySelector('.v-player'),
-            autoplay: false,
-            volume: 0.5,
-            playMode: 'order',
-            visualEffect: 'normal'
-        };
-        for (let key in defaultOption) {
-            if (!option.hasOwnProperty(key)) {
-                option[key] = defaultOption[key];
-            }
-        }*/
-
         //this.context = canvas.getContext("2d"),
         this.audioContext = null;
         this.audio = new Audio();
@@ -85,7 +70,6 @@ class Player {
             this.playMode = playMode[m];
         }, false);
 
-
         // 音乐控制
         pause.addEventListener('click', () => {
             if(this.playing) {
@@ -114,7 +98,6 @@ class Player {
             this.then();
         }, false);
 
-
         //音量控制
         const volumeBar = controller.querySelector('input.volume'), 
               volumeBtn = controller.querySelector('a.volume');
@@ -134,7 +117,6 @@ class Player {
             }
             this.audio.volume = this.volume;
         }, false);
-
 
         // 时间进度条
         const playedBar = document.querySelector('.played-bar');
@@ -156,7 +138,6 @@ class Player {
                 fr.readAsDataURL(file);
             }
         }, false);
-
 
         // 选择本地音乐
         const music = controller.querySelector('.music'),
@@ -191,7 +172,6 @@ class Player {
             }
         }, false);
 
-
         // 列表开关
         const listBtn = controller.querySelectorAll('a.toggle'),
               play = controller.querySelector('.play-list'),
@@ -207,7 +187,6 @@ class Player {
             }, false);
         }
 
-
         // 可视化效果选择
         const ul = controller.querySelector(".effect-list");
         ul.addEventListener('click', (e) => {
@@ -219,17 +198,21 @@ class Player {
                     context.translate(0,0);
                     this.visualiseMode = "normal";
                     break;
-                case "circle":
+                case "ring":
                     context.translate(canvas.width/2, canvas.height/2);
-                    this.visualiseMode = "circle";
+                    this.visualiseMode = "ring";
                     break;
                 case "concentric":
                     context.translate(canvas.width/2, canvas.height/2);
                     this.visualiseMode = "concentric";
                     break;
-                case "ring":
+                case "circle":
                     context.translate(canvas.width/2, canvas.height/2);
-                    this.visualiseMode = "ring";
+                    this.visualiseMode = "circle";
+                    break;
+                case "dicyclic":
+                    context.translate(canvas.width/2, canvas.height/2);
+                    this.visualiseMode = "dicyclic";
                     break;
             }
         }, false);
@@ -240,57 +223,23 @@ class Player {
         this.audio.volume = this.volume;
         this.playing = true;
         fileReader.readAsArrayBuffer(file);
-
         fileReader.onload = (e) => {
             let audioContext = this.audioContext;
             this.audio.src = URL.createObjectURL(file);
             this.analyze(audioContext, this.audio);
         };
-        /*
-        var fileReader = new FileReader();
-        var that = this;  // 这里将当前的this也就是Player对象赋值给that，以防下面函数中的this指代的对象改变
-        fileReader.onload = function(e) {
-            var src = e.target.result,
-                audioContext = that.audioContext;  // 如果这里用this则指向fileReader
-            audioContext.decodeAudioData(src).then(function(buffer) {
-                that.analyze(audioContext, buffer);  // 解码完成后对buffer数据可视化处理，这里使用this会指向window
-            });
-        };
-        fileReader.readAsArrayBuffer(file);
-        */
     }
 
+    // 分析频谱信息
     analyze(audioContext, audio) {
         let audioSource = audioContext.createMediaElementSource(audio),
             analyser = audioContext.createAnalyser();
         analyser.fftSize = 4096;
         audioSource.connect(analyser);
-        analyser.connect(audioContext.destination);
+        analyser.connect(audioContext.destination);  // 再将analyser连接到扬声器
 
         this.play(audio);
-        this.visualise(analyser);
-        /*
-        var bufferSource = audioContext.createBufferSource(),
-            analyser = audioContext.createAnalyser();
-        analyser.fftSize = 4096;
-        bufferSource.connect(analyser);  // 解码后的缓冲数据连接到analyser
-        analyser.connect(audioContext.destination);  // 再将analyser连接到扬声器
-        bufferSource.buffer = buffer;
-        if(this.animation !== null) {
-            cancelAnimationFrame(this.animation);  // 停止正在播放的
-        }
-        bufferSource.start();  // 开始播放
-        this.playing = 1;
-
         this.visualise(analyser);  // 根据分析后的音频频谱信息进行绘图
-
-        var that = this;
-        bufferSource.onended = function() {  // 播放结束
-            that.playing = 0;
-            cancelAnimationFrame(that.animation);  // 结束动画
-            that.init();
-        };
-        */
     }
 
     visualise(analyser) {
@@ -301,8 +250,8 @@ class Player {
                 case "normal":
                     this.visualise_normal(analyser, dataArray);
                     break;
-                case "circle":
-                    this.visualise_circle(analyser, dataArray);
+                case "ring":
+                    this.visualise_ring(analyser, dataArray);
                     break;
                 case "concentric":
                     this.visualise_concentric(analyser, dataArray);
@@ -310,14 +259,16 @@ class Player {
                 case "line":
                     this.visualise_line(analyser);
                     break;
-                case "ring":
-                    this.visualise_ring(analyser, dataArray);
+                case "circle":
+                    this.visualise_circle(analyser, dataArray);
+                    break;
+                case "dicyclic":
+                    this.visualise_dicyclic(analyser, dataArray);
                     break;
             }
             this.animation = requestAnimationFrame(render);
         }
         this.animation = requestAnimationFrame(render);
-
     }
 
     visualise_normal(analyser, dataArray) {
@@ -329,7 +280,6 @@ class Player {
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.fillStyle = "rgba(255,255,255,0.6)";
         
-
         let stepAfter = Math.round(200/num),  // 采样步长
             stepBefore = Math.round((dataArray.length*0.8-200)/num);
 
@@ -345,7 +295,7 @@ class Player {
         }
     }
 
-    visualise_circle(analyser, dataArray) {
+    visualise_ring(analyser, dataArray) {
         const num = 100,  // 柱条数目
               ang = Math.PI / num;
         let r = this.radius,
@@ -412,12 +362,13 @@ class Player {
         }
         context.stroke();
     }
- /*   visualise_double: function(analyser, dataArray) {
+
+    visualise_dicyclic(analyser, dataArray) {
         analyser.getByteFrequencyData(dataArray);
         context.clearRect(-canvas.width/2, -canvas.height/2, canvas.width, canvas.height);
         context.fillStyle = "rgba(255,255,255,0.6)";
 
-        var rOuter = canvas.height/3,
+        let rOuter = canvas.height/3,
             lOuter = 2*Math.PI*rOuter * 0.8,
             angOuter = 2*Math.PI * 0.8 / 100,
             widthOuter = lOuter / 100,
@@ -446,9 +397,9 @@ class Player {
             context.restore();
         }
 
-    }, */
+    }
 
-    visualise_ring(analyser, dataArray) {
+    visualise_circle(analyser, dataArray) {
         analyser.getByteFrequencyData(dataArray);
         context.clearRect(-canvas.width/2, -canvas.height/2, canvas.width, canvas.height);
         context.fillStyle = "rgba(255,255,255,0.6)";
@@ -473,7 +424,7 @@ class Player {
         }
     }
 
-
+    // play music and update time display
     play(audio) {
         const played = document.querySelector('.played'),
               total = document.querySelector('.total'),
@@ -527,7 +478,7 @@ class Player {
         return order;
     }
 
-    // 下一曲目
+    // next track
     then() {
         if(this.playMode==='random') {
             this.currentOrder = shuffle();
