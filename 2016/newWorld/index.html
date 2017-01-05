@@ -62,7 +62,6 @@
       </select>
       <select name="province">
         <option selected disabled hidden>省份</option>
-        <option></option>
       </select>
       <select>
         <option selected disabled hidden>城市</option>
@@ -105,82 +104,89 @@
         </div>
       </div>
       <div class="article-preview">
-        <div class="vertical-center">
-          <h3>新世界/01</h3>
+        <input type="radio" name="tab" checked="checked">
+        <input type="radio" name="tab">
+        <input type="radio" name="tab">
+        <div class="center article01">
+          <h3>新世界01</h3>
           <p>新世界是个新世界新世界是个新世界新世界是个新世界新世界是个新世界新世界是个新世界新世界是个新世界新世界是个新世界新世界是个新世界新世界是个新世界</p>
           <a href="#">更多详情</a>
         </div>
-      </div>
-      <div class="article-preview">
-        <div class="vertical-center">
-          <h3>新世界/02</h3>
-          <p>新世界是个新世界新世界是个新世界新世界是个新世界新世界是个新世界新世界是个新世界新世界是个新世界新世界是个新世界新世界是个新世界新世界是个新世界</p>
+        <div class="center article02">
+          <h3>新世界02</h3>
+          <p>新世界是个新世界新世界是个新世界新世界是个新世界新世界是个新世界新世界是个新世界新世界是个新世界新世界是个新世界新世界是个新世界</p>
           <a href="#">更多详情</a>
         </div>
-      </div>
-      <div class="article-preview">
-        <div class="vertical-center">
-          <h3>新世界/03</h3>
-          <p>新世界是个新世界新世界是个新世界新世界是个新世界</p>
+        <div class="center article03">
+          <h3>新世界03</h3>
+          <p>新世界是个新世界新世界是个新世界新世界是个新世界新世界是个新世界新世界是个新世界新世界是个新世界</p>
           <a href="#">更多详情</a>
+        </div>
+        <div>
+          <span class="article01"></span>
+          <span class="article02"></span>
+          <span class="article03"></span>
         </div>
       </div>
     </div>
     <div class="article">
-      <h2>新时代 关于爱生活的我们</h2>
-      <a href="#">查看更多</a>
+      <div class="center">
+        <h2>新时代<br/>关于爱生活的我们</h2>
+        <a href="#">查看更多</a>
+      </div>
     </div>
     <div class="teletext">
-      <h2>新时代 关于爱生活的我们</h2>
-      <a href="#">查看更多</a>
+      <div class="vertical-center">
+        <h2>新时代<br/>关于爱生活的我们</h2>
+        <a href="#">查看更多</a>
+      </div>
       <img src="img/article02.png">
     </div>
   </div>
-  <div>
+  <div class="join">
     <p class="info-title">成为我们的志愿者</p>
-    <p class="description">新世界的大家庭需要每一个爱生活的人的人的加入，如果你够年轻，有梦想，有激情那就不要犹豫，快来加入我们，成为改变所有人生活的人</p>
-    <ul class="policy">
-      <li>
-        <h3>新世界志愿者协议</h3>
-        <p>加入新世界志愿者的人员必须遵守中华人民共和国的相关法律法规，并且本着平等的原则……</p>
-        <a href="#">more</a>
-      </li>
-      <li>
-        <h3>新世界志愿者权利</h3>
-        <p>新世界志愿者享受新世界内部所有资源共享的权利，并享受所在城市新世界活动的优先参与资格</p>
-        <a href="#">more</a>
-      </li>
-      <li>
-        <h3>更多条款</h3>
-        <a href="#">more</a>
-      </li>
-    </ul>
-    <form name="register">
-      <input type="text" placeholder="姓名：">
-      <input type="text" placeholder="年龄：">
-      <input type="text" placeholder="联系方式：">
-      <input type="text" placeholder="联系地址：">
-      <textarea placeholder="请简单描述您梦想的生活："></textarea>
-      <input type="submit" value="提交申请">
-    </form>
-  </div>
-  <div>
-    <p class="info-title">联系我们</p>
-    <p class="description">为了更好的获取我们最新的产品资讯，您可以留下您的电子邮箱快速订阅我们的产品资讯也可以通过以下任何方式关注我们的动态</p>
-    <form>
-      <input type="text" placeholder="someone@email.com">
-      <input type="submit" value="提交">
-    </form>
-    <ul>
-      <li><a href="#"></a></li>
-      <li><a href="#"></a></li>
-      <li><a href="#"></a></li>
-      <li><a href="#"></a></li>
-    </ul>
+    <p class="description">新世界的大家庭需要每一个爱生活的人的人的加入，如果你够年轻，有梦想，有激情<br/>那就不要犹豫，快来加入我们，成为改变所有人生活的人</p>
+    <div>
+      <ul class="policy">
+        <li>
+          <h3>新世界志愿者协议</h3>
+          <p>加入新世界志愿者的人员必须遵守中华人民共和国的相关法律法规，并且本着平等的原则……</p>
+          <a href="#">more</a>
+        </li>
+        <li>
+          <h3>新世界志愿者权利</h3>
+          <p>新世界志愿者享受新世界内部所有资源共享的权利，并享受所在城市新世界活动的优先参与资格</p>
+          <a href="#">more</a>
+        </li>
+        <li>
+          <h3>更多条款</h3>
+          <a href="#">more</a>
+        </li>
+      </ul>
+      <form class="register">
+        <input type="text" placeholder="姓名：">
+        <input type="text" placeholder="年龄：">
+        <input type="text" placeholder="联系方式：">
+        <input type="text" placeholder="联系地址：">
+        <textarea placeholder="请简单描述您梦想的生活："></textarea>
+        <input type="submit" value="提交申请">
+      </form>
+    </div>
   </div>
   <footer>
-    <p>2016</p>
+    <p>联系我们</p>
+    <p class="description">为了更好的获取我们最新的产品资讯，您可以留下您的电子邮箱快速订阅我们的产品资讯<br/>也可以通过以下任何方式关注我们的动态</p>
+    <form>
+      <input type="email" placeholder="someone@email.com"><input type="submit" value="提交">
+    </form>
+    <ul>
+      <li><a href="#"><img src="img/qq.png"></a></li>
+      <li><a href="#"><img src="img/weibo.png"></a></li>
+      <li><a href="#"><img src="img/twitter.png"></a></li>
+      <li><a href="#"><img src="img/web.png"></a></li>
+    </ul>
     <a href="#top">Back to top</a>
+    <p>©2016新世界</p>
   </footer>
 </body>
 </html>

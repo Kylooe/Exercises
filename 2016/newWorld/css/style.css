@@ -7,6 +7,7 @@ a {
     text-decoration: none;
     display: inline-block;
     font-size: 15px;
+    outline: none;
 }
 
 p {
@@ -51,8 +52,14 @@ nav a {
     color: #333;
 }
 
-nav a:hover {
-    border-bottom: 2px solid #e53c3c;
+nav a:hover:after {
+    content: '';
+    width: 80px;
+    height: 3px;
+    background-color: #e53c3c;
+    display: block;
+    position: relative;
+    top: -3px;
 }
 
 .login {
@@ -70,7 +77,6 @@ nav a:hover {
     background-size: cover;
     color: #fff;
     font-size: 1.5em;
-    font-family: tahoma;
     overflow: hidden;
 }
 
@@ -153,6 +159,18 @@ p.info-title {
     padding: 50px 0 10px;
 }
 
+p.info-title:after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 3px;
+    position: relative;
+    top: 10px;
+    left: 50%;
+    margin-left: -20px;
+    background-color: #fff;
+}
+
 p.description {
     font-size: .8em;
 }
@@ -201,16 +219,6 @@ ul.activity {
     margin: auto;
 }
 
-ul.activity li:hover img {
-    position: relative;
-    top: 70px;
-}
-
-ul.activity li:hover p {
-    position: relative;
-    top: -360px;
-}
-
 ul.activity img {
     padding: 15px 10px;
     border: 1px solid #ddd;
@@ -218,13 +226,44 @@ ul.activity img {
 }
 
 ul.activity p {
-    margin: 10px;
+    margin: 5px;
     border: none;
+    padding: 0;
 }
 
 ul.activity p:last-child {
     color: #aaa;
     font-size: .8em;
+}
+
+ul.activity li:hover img {
+    position: relative;
+    top: 70px;
+}
+
+ul.activity li:hover p {
+    position: relative;
+    top: -350px;
+}
+
+ul.activity li:hover p:nth-child(2) {
+    letter-spacing: 30px;
+    text-indent: 30px;
+}
+
+.content {
+    position: relative;
+    text-align: center;
+}
+
+.content a {
+    color: #E8504F;
+    border: 1px solid #E8504F;
+}
+
+.content a:hover {
+    color: #fff;
+    background-color: #E8504F;
 }
 
 .series {
@@ -248,7 +287,6 @@ ul.activity p:last-child {
 
 .topic h2 {
     margin: 0;
-    text-align: center;
     font-size: 150px;
     line-height: 150px;
 }
@@ -272,29 +310,311 @@ ul.activity p:last-child {
     right: 0;
     width: 33%;
     height: 100%;
-    text-align: center;
-    opacity: 0;
 }
 
-.topic + .article-preview {
-    opacity: 1;
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
-.article-preview .vertical-center {
-    width: 80%;
-    margin: auto;
+.article-preview div.center {
+    display: none;
+    width: 300px;
 }
 
 .article-preview p {
     text-align: left;
-    color: #bbb;
+    color: #aaa;
     font-size: .8em;
     line-height: 2.5em;
+    height: 100px;
 }
 
 .article-preview a {
-    color:  #E8504F;
-    border: 1px solid  #E8504F;
     padding: 5px 20px;
+    margin: 30px 99px;
+}
+
+input[type="radio"] {
+    position: relative;
+    top: 75%;
+    z-index: 10;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.article-preview div:last-child {
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+span {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid #999;
+    margin: 5px;
+    cursor: pointer;
+}
+
+input[type="radio"]:nth-of-type(1):checked ~ div.article01, 
+input[type="radio"]:nth-of-type(2):checked ~ div.article02,
+input[type="radio"]:nth-of-type(3):checked ~ div.article03 {
+    display: block;
+}
+
+input[type="radio"]:nth-of-type(1):checked ~ div span.article01, 
+input[type="radio"]:nth-of-type(2):checked ~ div span.article02,
+input[type="radio"]:nth-of-type(3):checked ~ div span.article03 {
+    background-color: #999;
+}
+
+.article, .teletext {
+    height: 520px;
+}
+
+.article h2,
+.teletext h2 {
+    margin: 0;
+    padding: 30px 0;
+    font-weight: lighter;
+}
+
+.article h2:after,
+.teletext h2:after {
+    content: '';
+    display: block;
+    width: 30px;
+    height: 3px;
+    position: relative;
+    top: 30px;
+    left: 50%;
+    margin-left: -15px;
+}
+
+.article h2:after {
+    background-color: #fff;
+}
+
+.teletext h2:after {
+    background-color: #777;
+}
+
+.article a, .teletext a {
+    padding: 10px 40px;
+    font-size: 1.2em;
     margin-top: 30px;
+}
+
+.article {
+    width: 34%;
+    position: relative;
+    color: #fff;
+    background-color: #E8504F;
+}
+
+.article a {
+    color: #fff;
+    border-color: #fff;
+}
+
+.article a:hover {
+    color: #E8504F;
+    background-color: #fff;
+}
+
+.teletext {
+    width: 66%;
+    position: absolute;
+    top: 560px;
+    right: 0;
+}
+
+.teletext:after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-width: 15px 30px;
+    border-style: solid;
+    border-color: transparent transparent transparent #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-15px);
+}
+
+.teletext div {
+    width: 50%;
+    left: 25%;
+    transform: translate(-50%,-50%);
+    color: #444;
+}
+
+.teletext img {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    top: 0;
+    right: 0;
+}
+
+.join {
+    padding: 100px;
+}
+
+.join .info-title:after {
+    background-color: #E8504F;
+}
+
+.join .description {
+    color: #aaa;
+}
+
+.join div {
+    position: relative;
+    margin: 80px auto;
+    width: 1200px;
+}
+
+ul.policy {
+    display: inline-block;
+    width: 350px;
+    margin: 0;
+}
+
+ul.policy li {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin: 30px 0;
+}
+
+ul.policy h3 {
+    color: #666;
+    font-weight: lighter;
+}
+
+ul.policy p {
+    text-align: left;
+    padding: 0;
+    border: none;
+    font-size: .8em;
+    color: #aaa;
+}
+
+ul.policy a {
+    display: block;
+    text-align: right;
+    color: #aaa;
+}
+
+ul.policy a:before {
+    content: url(../img/more.png);
+    position: relative;
+    right: 10px;
+}
+
+form.register {
+    width: 700px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 30px;
+}
+
+form.register * {
+    background-color: #eee;
+    border: none;
+}
+
+input[type="text"] {
+    width: 300px;
+    height: 3em;
+    margin: 0 10px 20px;
+    padding-left: 20px;
+}
+
+textarea{
+    width: 625px;
+    height: 150px;
+    margin: 0 10px 10px;
+    padding: 10px 20px;
+    font-size: .9em;
+}
+
+form.register input:last-child {
+    width: 665px;
+    margin: 10px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+footer {
+    padding-top: 80px;
+    background-color: #33363F;
+    color: #fff;
+}
+
+footer p:first-child {
+    font-size: 1.2em;
+    margin: 0;
+}
+
+footer form {
+    width: 500px;
+    margin: 30px auto;
+}
+
+footer input {
+    margin: 0;
+    border: none;
+    box-sizing: border-box;
+    height: 40px;
+}
+
+input[type="email"] {
+    width: 420px;
+    padding-left: 15px;
+}
+
+footer input[type="submit"] {
+    width: 80px;
+    background-color: #717171;
+    color: #fff;
+    cursor: pointer;
+}
+
+footer ul {
+    width: 100%;
+    margin-top: 40px;
+}
+
+footer li {
+    width: 30px;
+    margin: 0 10px;
+}
+
+footer img {
+    padding: 0;
+}
+
+footer p:last-child {
+    background-color: #30303A;
+    margin: 0;
+    line-height: 50px;
+    text-align: left;
+    padding-left: 100px;
+}
+
+footer > a {
+    color: #fff;
+    position: absolute;
+    right: 0;
+    line-height: 50px;
+    padding-right: 50px;
 }
