@@ -46,10 +46,6 @@ h1 {
     border-bottom: 2px dashed #adadae;
 }
 
-div#list {
-    padding-top: 15px;
-}
-
 input {
     position: absolute;
     left: -9999px;

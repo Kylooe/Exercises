@@ -3,7 +3,7 @@
 <head>
   <title>visualize music</title>
   <meta charset="utf-8">
-  <link rel="stylesheet" type="text/css" href="./style.css">
+  <link rel="stylesheet" type="text/css" href="./src/style.css">
   <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_ni1yklzlvwyx2yb9.css">
 </head>
 <body>
@@ -14,7 +14,7 @@
         <span class="total">00:00</span>
       <input type="range" class="played-bar" min="0" max="1000" value="0">
       <div id="controller">
-        <a href="javascript:;"><i class="iconfont icon-order"></i></a>
+        <a href="javascript:;" title="播放模式"><i class="iconfont icon-order"></i></a>
         <a href="javascript:;"><i class="iconfont icon-pre"></i></a>
         <a href="javascript:;"><i class="iconfont icon-play"></i></a>
         <a href="javascript:;"><i class="iconfont icon-next"></i></a>
@@ -22,19 +22,19 @@
         <div class="volume">
           <input type="range" class="volume" min="0" max="10" value="5">
         </div>
-        <a href="javascript:;">
+        <a href="javascript:;" title="设置背景">
           <input type="file" class="image" accept="image/jpg, image/jpeg, image/bmp, image/png">
           <i class="iconfont icon-image"></i>
         </a>
 
-        <a class="toggle" href="javascript:;"><i class="iconfont icon-music"></i></a>
+        <a class="toggle" href="javascript:;" title="音乐列表"><i class="iconfont icon-music"></i></a>
         <div class="play-list off">
           <input type="file" class="music" accept="audio/mp3, audio/ogg, audio/wav" multiple />
-          <a href="javascript:;"><i class="iconfont icon-add"></i></a>
+          <a href="javascript:;" title="添加音乐"><i class="iconfont icon-add"></i></a>
           <ul></ul>
         </div>
 
-        <a class="toggle" href="javascript:;"><i class="iconfont icon-effect"></i></a>
+        <a class="toggle" href="javascript:;" title="选择效果"><i class="iconfont icon-effect"></i></a>
         <ul class="effect-list off">
           <li>normal</li>
           <li>circle</li>
@@ -49,6 +49,6 @@
     <img id="bg">
     <p>Kylooe 2016</p>
   </div>
-  <script type="text/javascript" src="./app.js"></script>
+  <script type="text/javascript" src="./src/app.js"></script>
 </body>
 </html>

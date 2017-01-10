@@ -109,27 +109,30 @@ nav a:hover:after {
 
 ul {
     list-style: none;
+}
+
+.propag {
     text-align: center;
     width: 1280px;
     margin: 60px auto;
     padding: 0;
 }
 
-li {
+.propag li {
     display: inline-block;
     width: 24%;
 }
 
-li img {
+.propag li img {
     padding-bottom: 30px;
 }
 
-li p {
+.propag li p {
     padding: 0 60px;
     border-right: 2px solid #aaa;
 }
 
-li:last-child p {
+.propag li:last-child p {
     border: none;
 }
 
@@ -176,37 +179,85 @@ p.description {
 }
 
 .search form {
-    text-align: center;
-    margin-top: 50px;
+    width: 1200px;
+    margin: 40px auto;
 }
 
-.search form > * {
-    width: 18em;
-    padding: 6px;
-    margin: 0 10px;
-}
-
-select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
+.select {
+    float: left;
+    width: 260px;
+    height: 40px;
+    margin: 0 20px;
+    font-size: .9em;
     border: 1px solid transparent;
+    border-bottom-width: 0;
+    box-sizing: border-box;
+    cursor: pointer;
 }
 
-select {
+.select div {
     background-color: #fff;
-    background: url(../img/down.png) no-repeat 95% #fff;
+    color: #aaa;
+    padding: 10px;
 }
 
-select:focus {
+div.unfold {
     border: 1px solid #E8504F;
 }
 
-.search input{
+.select div:after {
+    content: url(../img/down.png);
+    float: right;
+}
+
+.option {
+    display: none;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    border: 1px solid #E8504F;
+    border-top-width: 0;
+}
+
+.option.unfold {
+    display: block;
+}
+
+.option li {
+    height: 1.5em;
+    background: #E3E3E3;
+    color: #777;
+    position: relative;
+    padding: 2px 40px;
+}
+
+.option li:hover {
     background-color: #E8504F;
-    border: none;
-    cursor: pointer;
     color: #fff;
+}
+
+.option li:hover:before {
+    content: url(../img/tick.png);
+    position: absolute;
+    left: 15px;
+    line-height: 100%;
+}
+
+.option input[type="radio"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    margin: 0;
+    opacity: 0;
+}
+
+input.select {
+    border: none;
+    background: #E8504F;
+    color: #fff;
+    letter-spacing: 10px;
+    font-size: 1em;
 }
 
 .activity {
@@ -215,9 +266,18 @@ select:focus {
 
 ul.activity {
     width: 80%;
-    padding: 100px;
     margin: auto;
+    padding: 100px 0;
+    overflow: hidden;
+    text-align: center;
 }
+
+.activity li {
+    float: left;
+    width: 25%;
+    text-align: center;
+}
+
 
 ul.activity img {
     padding: 15px 10px;
@@ -226,6 +286,7 @@ ul.activity img {
 }
 
 ul.activity p {
+    width: 100%;
     margin: 5px;
     border: none;
     padding: 0;
@@ -337,7 +398,7 @@ ul.activity li:hover p:nth-child(2) {
     margin: 30px 99px;
 }
 
-input[type="radio"] {
+input[name="tab"] {
     position: relative;
     top: 75%;
     z-index: 10;
@@ -589,18 +650,13 @@ footer input[type="submit"] {
     cursor: pointer;
 }
 
-footer ul {
-    width: 100%;
-    margin-top: 40px;
+.link {
+    text-align: center;
+    margin-bottom: 50px;
 }
 
-footer li {
-    width: 30px;
-    margin: 0 10px;
-}
-
-footer img {
-    padding: 0;
+.link a {
+    margin: 10px;
 }
 
 footer p:last-child {
