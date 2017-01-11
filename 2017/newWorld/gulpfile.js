@@ -1,7 +1,7 @@
 var gulp = require('gulp'),
     imagemin = require('gulp-imagemin');
 gulp.task('imagemin', function() {
-    gulp.src('img/*.*')
+    gulp.src('src/img/*.*')
         .pipe(imagemin({
             progressive: true
         }))
