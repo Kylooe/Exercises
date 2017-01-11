@@ -33,7 +33,7 @@ header {
 
 #top {
     font-size: 1.4em;
-    background: url(../img/logo.png) no-repeat left center;
+    background: url(../dist/img/logo.png) no-repeat left center;
     background-size: 20%;
     color: #000;
     padding: 0 40px;
@@ -65,7 +65,7 @@ nav a:hover:after {
 .login {
     position: absolute;
     right: 20px;
-    background: url(../img/login.jpg) no-repeat left bottom;
+    background: url(../dist/img/login.jpg) no-repeat left bottom;
     color: #E8504F;
     padding-left: 20px;
 }
@@ -73,7 +73,7 @@ nav a:hover:after {
 .cover {
     width: 100%;
     height: 800px;
-    background: url(../img/pic01.jpg) center;
+    background: url(../dist/img/pic01.jpg) center;
     background-size: cover;
     color: #fff;
     font-size: 1.5em;
@@ -151,7 +151,7 @@ ul {
 
 .search {
     height: 350px;
-    background: url(../img/place.jpg);
+    background: url(../dist/img/place.jpg);
     background-size: cover;
     color: #fff;
 }
@@ -206,7 +206,7 @@ div.unfold {
 }
 
 .select div:after {
-    content: url(../img/down.png);
+    content: url(../dist/img/down.png);
     float: right;
 }
 
@@ -237,7 +237,7 @@ div.unfold {
 }
 
 .option li:hover:before {
-    content: url(../img/tick.png);
+    content: url(../dist/img/tick.png);
     position: absolute;
     left: 15px;
     line-height: 100%;
@@ -333,7 +333,7 @@ ul.activity li:hover p:nth-child(2) {
 }
 
 .topic {
-    background: url(../img/article01.jpg) no-repeat;
+    background: url(../dist/img/article01.jpg) no-repeat;
     background-size: cover;
     width: 67%;
     height: 100%;
@@ -575,7 +575,7 @@ ul.policy a {
 }
 
 ul.policy a:before {
-    content: url(../img/more.png);
+    content: url(../dist/img/more.png);
     position: relative;
     right: 10px;
 }
