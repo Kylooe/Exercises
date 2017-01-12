@@ -4,7 +4,6 @@ var Color = {
     sea: 0xb67768,
     planeMain: 0xaa3311,
     planeSub: 0xdc7b17,
-    //coin: 0xf2e3c4
     coin: 0x68c3c0,
     stone: 0x59332e
 };
@@ -52,6 +51,8 @@ function resize() {
     camera.updateProjectionMatrix();
 }
 
+
+// 设置光线
 function createLight() {
     var ambientLight = new THREE.AmbientLight(Color.ambient);
     var directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -68,6 +69,7 @@ function createLight() {
     scene.add(ambientLight);
     scene.add(directionalLight);
 }
+
 
 var sea;
 function createSea() {
@@ -140,7 +142,6 @@ function createSky() {
 
 
 // 生成得分点与处理碰撞得分
-
 var Coin = function() {
     var geom = new THREE.BoxGeometry(5, 5, 5),
         mat = new THREE.MeshPhongMaterial({
@@ -186,7 +187,7 @@ Coins.prototype.update = function() {
         if(spacing<12 || coin.ang>Math.PI) {
             this.array.splice(i,1);
             this.mesh.remove(coin.mesh);
-            if(spacing<12) {
+            if(spacing<12) {  //碰撞条件
                 chips.generate(coin.mesh.position.clone(), 5, Color.coin, 0.8);
                 scene.add(chips.mesh);
                 addEnergy();
@@ -306,19 +307,6 @@ Chip.prototype.explode = function(position, scale) {
     },50);
 };
 
-/*
-var Chips = function(position, n, color, scale) {
-    this.mesh = new THREE.Object3D();
-    for(var i=0; i<n; i++) {
-        var chip = new Chip(color);
-        this.mesh.add(chip.mesh);
-        chip.mesh.visible = true;
-        chip.mesh.position.x = position.x;
-        chip.mesh.position.y = position.y;
-        chip.explode(position, scale);
-    }
-}
-*/
 var Chips = function() {
     this.mesh = new THREE.Object3D();
     this.array = [];
@@ -459,7 +447,6 @@ function createPlane() {
 }
 
 
-
 // 鼠标控制飞机上下
 var targetY = 0;
 function mousemove(event) {
@@ -471,21 +458,20 @@ function mousemove(event) {
 }
 
 
+// 与coin碰撞后得分
 function updateEnergy(){
-  energy -= deltaTime*0.002;
-  energy = Math.max(0, energy);
-  energyBar.style.right = (100-energy)+"%";
-  energyBar.style.backgroundColor = (energy<50)? "#f25346" : "#68c3c0";
-
-  if (energy<30){
-    energyBar.style.animationName = "blinking";
-  }else{
-    energyBar.style.animationName = "none";
-  }
-
-  if (energy <1){
-    status = "gameover";
-  }
+    energy -= deltaTime*0.002;
+    energy = Math.max(0, energy);
+    energyBar.style.right = (100-energy) + "%";
+    energyBar.style.backgroundColor = (energy<50) ? "#f25346" : "#68c3c0";
+    if(energy<30) {
+        energyBar.style.animationName = "blink";
+    }else {
+        energyBar.style.animationName = "none";
+    }
+    if(energy<1) {
+        status = "gameover";
+    }
 }
 
 
@@ -502,7 +488,7 @@ function loop() {
             createCoins();
         }
 
-        if(Math.floor(dis)%25===0) {
+        if(Math.floor(dis)%28===0) {
             createStones();
         }
 
@@ -514,16 +500,15 @@ function loop() {
         plane.mesh.rotation.z = (targetY - plane.mesh.position.y) * 0.02;
         
     }else {
-        sky.rotation.z += 0.002;
         if(status=="gameover"){
+            sky.rotation.z += 0.002;
+            sea.rotation.z += 0.004;
             plane.mesh.rotation.z += (-Math.PI/2 - plane.mesh.rotation.z)*0.02;
             plane.mesh.rotation.x += 0.0003*deltaTime;
             plane.mesh.position.y -= 2;
             if (plane.mesh.position.y < -100){
                 replayMessage.style.display = "block";
             }
-        }else {
-            
         }
     }
 

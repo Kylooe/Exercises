@@ -14,8 +14,11 @@
   left: 0;
   width: 100%;
   text-align: center;
-  pointer-events: none;
-  color: #d1b790;
+  color: #cca872;
+}
+
+#replayMessage {
+  color: #cca872;
 }
 
 .score {
@@ -84,13 +87,13 @@
   display: none;
 }
 
-@-webkit-keyframes blinking {
+@-webkit-keyframes blink {
   0% { opacity: 1; }
   50% { opacity: 0; }
   100% { opacity: 1; }
 }
 
-@keyframes blinking {
+@keyframes blink {
   0% { opacity: 1; }
   50% { opacity: 0; }
   100% { opacity: 1; }

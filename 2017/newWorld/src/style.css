@@ -14,6 +14,12 @@ p {
     text-align: center;
 }
 
+@media screen and (max-width: 1280px) {
+    body > * {
+        width: 1280px;
+    }
+}
+
 header {
     width: 100%;
     height: 56px;
@@ -71,7 +77,6 @@ nav a:hover:after {
 }
 
 .cover {
-    width: 100%;
     height: 800px;
     background: url(../dist/img/pic01.jpg) center;
     background-size: cover;
@@ -525,7 +530,7 @@ input[type="radio"]:nth-of-type(3):checked ~ div span.article03 {
 }
 
 .join {
-    padding: 100px;
+    padding: 100px 0;
 }
 
 .join .info-title:after {
