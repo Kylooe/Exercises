@@ -17,10 +17,6 @@
   color: #cca872;
 }
 
-#replayMessage {
-  color: #cca872;
-}
-
 .score {
   width: 100%;
   margin: 2em 0 0;
@@ -82,9 +78,10 @@
   left: 0;
   width: 100%;
   text-align: center;
-  pointer-events: none;
+  color: #cca872;
   font-size: 2em;
   display: none;
+  user-select: none;
 }
 
 @-webkit-keyframes blink {
