@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>五子棋</title>
+    <meta charset="utf-8">
+    <style type="text/css">
+        body {
+            text-align: center;
+            font-family: "Microsoft JhengHei", Arial, SimSun, sans-serif;
+        }
+        h1 {
+            margin: 10px;
+            font-size: 36px;
+            text-align: left;
+        }
+        h1 span {
+            margin: 0 10px;
+            font-size: 1rem;
+            color: #efefef;
+        }
+        p {
+            margin: 5px 0;
+            text-align: right;
+            font-size: 14px;
+        }
+        a:not(.again) {
+            display: inline-block;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #fff;
+            background-color: #000;
+            border: 1px solid;
+            border-radius: 5px;
+            user-select: none;
+            transition: all .3s;
+        }
+        a:hover {
+            background-color: #fff;
+            color: #000;
+            cursor: pointer;
+        }
+        .switch {
+            margin: 10px 0 20px;
+        }
+        .turn {
+            text-align: center;
+            font-size: 1.2em;
+        }
+        .turn span {
+            font-weight: bold;
+        }
+        .turn .white {
+            color: #fff;
+            background-color: #000;
+        }
+        .again {
+            margin-left: 20px;
+            text-decoration: underline;
+        }
+        .container {
+            margin: 10px 0;
+            display: inline-block;
+        }
+        canvas {
+            margin: 20px;
+            background-color: #000;
+            box-shadow: 0 0 0 10px #000, 1px 1px 10px 12px #aaa;
+        }
+        .chessboard {
+            position: relative;
+            margin: 20px;
+            height: calc(30px * 14 + 1px);
+            width: calc(30px * 14 + 1px);
+            background: linear-gradient(0deg, transparent 29px, #000 1px), linear-gradient(-90deg, transparent 29px, #000 1px);
+            background-size: 30px 30px;
+            border: 10px solid #fff;
+            box-shadow: 0 0 0 10px #fff, 1px 1px 10px 12px #ccc;
+        }
+        .chess {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            border: 1px solid;
+        }
+        .chess.white {
+            background-color: #fff;
+        }
+        .chess.black {
+            background-color: #000;
+        }
+        .hide {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>五子棋<span>kylooe 2018</span></h1>
+    <div class="switch">
+        <a class="dom">DOM版</a>
+        <a class="canvas">Canvas版</a>
+    </div>
+    <p class="turn">行棋方：<span>黑</span><a class="again">再来一局</a></p>
+    <div class="container">
+        <div class="chessboard"></div>
+        <canvas class="hide"></canvas>
+    </div>
+    <div class="operation">
+        <a class="undo">悔棋</a>
+        <a class="redo">撤销悔棋</a>
+    </div>
+
+    <p>支持 DOM 版和 Canvas 版本切换、实现一个悔棋的功能、实现一个撤销悔棋的功能。</p>
+    <p>五子棋棋盘标准规格为十五路，即15*15共225格，黑子先手。</p>
+    <script type="text/javascript" src="./gomoku.js"></script>
+</body>
+</html>
