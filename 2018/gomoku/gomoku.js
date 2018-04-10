@@ -177,8 +177,6 @@ var Board = function() {
             if(i) point.y = offset;
             else point.x = offset;
         });
-        this.lastChess = point;
-        matrix.update(point);  // 更新棋谱
         return point;
     };
 
@@ -217,15 +215,19 @@ var Board = function() {
 
     obj.playChess = function(x, y) {
         var point = this.calcPos(x, y);
+        if(matrix.map[point.x][point.y] === undefined) {  // 禁止重复走棋
+            this.lastChess = point;
+            matrix.update(point);  // 更新棋谱
 
-        var dom = this.drawDomChess(point);
-        if(this.undone) {
-            this.moveDOMChess(dom);
-            this.undone = false;
-        } else this.createDOMChess(dom);
-        this.drawCanvasChess(point);
+            var dom = this.drawDomChess(point);
+            if(this.undone) {
+                this.moveDOMChess(dom);
+                this.undone = false;
+            } else this.createDOMChess(dom);
+            this.drawCanvasChess(point);
 
-        this.win(point);
+            this.win(point);
+        }
     };
 
     // 悔棋
